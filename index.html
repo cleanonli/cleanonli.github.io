@@ -209,6 +209,13 @@ a.row:hover .go{color:var(--accent)}
 .promise-box li{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:15px;word-break:keep-all}
 .promise-box li svg{color:var(--accent);margin-top:3px}
 .about .note{margin:0;color:var(--muted);font-size:14.5px}
+.sig{max-width:720px;margin:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fdfdfd;box-shadow:var(--shadow);position:relative}
+.sig video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:inherit}
+.sig.dark{background:#111423}
+.sig-replay{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;
+  border:1px solid #d9dce4;background:rgba(255,255,255,.9);color:#1e2128;font-size:12.5px;font-weight:600;cursor:pointer;opacity:0;transition:opacity .2s var(--ease)}
+.sig:hover .sig-replay,.sig-replay:focus-visible,.sig.ended .sig-replay{opacity:1}
+.sig-replay:hover{border-color:#2542d6;color:#2542d6}
 
 /* ---------- 진입 모션 ---------- */
 #view>*{animation:rise .4s var(--ease) both}
@@ -457,6 +464,10 @@ const views = {
   },
   about(){
     return `<header class="page-head"><h1>${L("title_about")}</h1></header>
+      <figure class="sig" id="sig">
+        <video id="sig-video" muted playsinline preload="auto" aria-label="CLEAN·ON 理 시그니처 영상"></video>
+        <button type="button" class="sig-replay" id="sig-replay">${P('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>')} 다시 재생</button>
+      </figure>
       <section class="about">
         ${has(SITE.about_intro) ? `<p class="intro">${esc(SITE.about_intro)}</p>` : ""}
         ${(SITE.promises||[]).filter(Boolean).length ? `<div class="promise-box"><span class="label">${I.power} ${esc(SITE.promise_title || "이 사이트의 약속")}</span>
@@ -507,6 +518,28 @@ function renderNav(key){
   $("#nav").innerHTML = items.map(([k,ic,cnt]) =>
     `<a href="#${k}" ${k===key ? 'aria-current="page"' : ""}>${ic}<span>${L("menu_"+k)}</span>${cnt!=="" ? `<span class="count">${cnt}</span>` : ""}</a>`).join("");
 }
+/* 화면 모드에 맞는 영상 고르기 */
+function sigSource(){
+  const v = $("#sig-video"), box = $("#sig");
+  if (!v) return null;
+  const dark = isDark();
+  const src = dark ? "assets/signature-dark.mp4" : "assets/signature.mp4";
+  if (v.getAttribute("src") !== src) {
+    v.setAttribute("poster", dark ? "assets/signature-dark-poster.jpg" : "assets/signature-poster.jpg");
+    v.setAttribute("src", src);
+  }
+  box.classList.toggle("dark", dark);
+  return v;
+}
+function setupSignature(){
+  const v = sigSource(), box = $("#sig"), btn = $("#sig-replay");
+  if (!v) return;
+  const play = () => { box.classList.remove("ended"); v.currentTime = 0; const p = v.play(); if (p && p.catch) p.catch(() => box.classList.add("ended")); };
+  v.addEventListener("ended", () => box.classList.add("ended"));
+  btn.onclick = play;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { box.classList.add("ended"); return; }
+  play();
+}
 function render(){
   const h = location.hash.slice(1);
   const m = h.match(/^([nc])-(.+)$/);
@@ -514,6 +547,7 @@ function render(){
   if (!m) document.title = key === "home" ? "CLEAN·ON 理" : `${(SITE["menu_"+key] || DEFAULT_LABELS["menu_"+key])} · CLEAN·ON 理`;
   $("#view").innerHTML = m ? detail(m[1], m[2]) : views[key]();
   renderNav(key);
+  if (key === "about" && !m) setupSignature();
   document.querySelectorAll(".chip").forEach(b => b.onclick = () => {
     const t = b.dataset.tag;
     activeTag = t === "전체" ? null : t;
@@ -546,8 +580,9 @@ function syncSwitch(){
   $("#theme").onclick = () => {
     const next = isDark() ? "light" : "dark";
     document.documentElement.dataset.theme = next; store.set(next); syncSwitch();
+    if (sigSource()) $("#sig").classList.add("ended");
   };
-  mq.addEventListener && mq.addEventListener("change", syncSwitch);
+  mq.addEventListener && mq.addEventListener("change", () => { syncSwitch(); if (sigSource()) $("#sig").classList.add("ended"); });
 })();
 
 /* ---------- 데이터 불러오기 ---------- */
