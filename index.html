@@ -263,13 +263,13 @@ a.row:hover .go{color:var(--accent)}
         <img class="lg-light" src="assets/logo-light.png" alt="CLEAN·ON 理">
         <img class="lg-dark" src="assets/logo-dark.png" alt="CLEAN·ON 理">
       </a>
-      <span class="kor" aria-hidden="true">클린온리</span>
+      <span class="kor" id="brand-kor" aria-hidden="true">클린온리</span>
     </div>
     <nav class="nav" aria-label="메뉴" id="nav"></nav>
     <div class="side-foot">
       <button type="button" class="switch" id="theme" role="switch" aria-checked="false">
         <span class="track"><span class="knob"></span></span>
-        <span class="label-text">다크 모드</span>
+        <span class="label-text" id="dark-label">다크 모드</span>
         <span class="state" id="theme-state">OFF</span>
       </button>
     </div>
@@ -277,7 +277,7 @@ a.row:hover .go{color:var(--accent)}
 
   <div class="main">
     <div class="inner">
-      <main id="view"><p class="empty">불러오는 중…</p></main>
+      <main id="view"><p class="empty" id="loading">불러오는 중…</p></main>
       <footer class="site-foot" id="footer">운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 이 사이트는 GitHub Pages에서 제공되며, 외부 링크를 누르면 해당 사이트로 이동합니다.</footer>
     </div>
   </div>
@@ -290,14 +290,43 @@ a.row:hover .go{color:var(--accent)}
    ========================================================================== */
 let NEWS = [], CONTENTS = [], SITE = {}, activeTag = null, keepTag = false;
 
-const DEFAULT_LABELS = {
+/* ==========================================================================
+   화면에 보이는 모든 문구의 기본값.
+   관리 화면 "사이트 문구"에 같은 이름의 칸을 채우면 그 값이 우선합니다.
+   {n} = 개수, {source} = 출처 기관명
+   ========================================================================== */
+const DEFAULTS = {
+  site_name:"CLEAN·ON 理", brand_kor:"클린온리",
+  slogan:"청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.",
+  footer:"운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 이 사이트는 GitHub Pages에서 제공되며, 외부 링크를 누르면 해당 사이트로 이동합니다.",
   menu_home:"처음", menu_news:"소식", menu_contents:"콘텐츠", menu_about:"소개",
+  dark_mode:"다크 모드", switch_on:"ON", switch_off:"OFF", loading:"불러오는 중…",
+  view_all:"전체 보기", all:"전체", kind_default:"콘텐츠",
+  go_read:"읽기", go_source:"원문",
+  empty_news:"아직 올린 소식이 없습니다.", empty_contents:"아직 올린 콘텐츠가 없습니다.",
   title_home_news:"최근 소식", title_home_contents:"아카이브 콘텐츠",
-  title_news:"청렴 소식", title_contents:"교육 콘텐츠", title_about:"소개"
+  home_new_badge:"새 콘텐츠",
+  home_stat_title:"아카이브", home_stat_news:"소식", home_stat_contents:"콘텐츠", home_updated:"마지막 업데이트",
+  home_privacy_title:"개인정보 수집", home_privacy_num:"0", home_privacy_text:"회원가입, 댓글, 방문자 분석 도구가 없습니다.",
+  home_tags_title:"태그로 찾기",
+  title_news:"청렴 소식", desc_news:"{n}건의 소식. 원문 링크와 함께 짧게 정리합니다.",
+  title_contents:"교육 콘텐츠", desc_contents:"{n}개의 콘텐츠. 직접 만든 교육 자료를 모아 둡니다.",
+  title_about:"소개", desc_about:"", about_replay:"다시 재생", promise_title:"이 사이트의 약속",
+  detail_summary:"3줄 요약", detail_btn_source:"{source} 원문 보기", detail_btn_file:"콘텐츠 열기",
+  detail_btn_link:"바로 가기", detail_btn_list:"목록으로",
+  not_found:"글을 찾을 수 없습니다.", back_home:"처음으로"
 };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const L = k => esc((SITE[k] && String(SITE[k]).trim()) || DEFAULT_LABELS[k]);
+const raw = k => { const v = SITE[k]; return (v != null && String(v).trim() !== "") ? String(v).trim() : (DEFAULTS[k] ?? ""); };
+/* T: 문구(이스케이프됨). vars로 {n}, {source} 치환 */
+const T = (k, vars = {}) => {
+  let t = esc(raw(k));
+  for (const [key, val] of Object.entries(vars)) t = t.replaceAll(`{${key}}`, val);
+  return t.replace(/\s{2,}/g, " ").trim();
+};
+const L = T;
+const D = (k, n) => T(k, { n: `<span class="mono">${n}</span>` });
 const d10 = d => String(d ?? "").slice(0,10);
 const byDate = (a,b) => d10(b.date).localeCompare(d10(a.date));
 const fmt = d => d10(d).replaceAll("-", ".");
@@ -359,7 +388,7 @@ function clean(html){
   return doc.body.innerHTML;
 }
 function sloganParts(){
-  const s = (SITE.slogan || "청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.").trim();
+  const s = raw("slogan");
   const m = s.match(/^(.+?[.!?。])\s+(.+)$/);
   const head = m ? m[1] : s, rest = m ? m[2] : "";
   const c = head.indexOf(",");
@@ -378,7 +407,7 @@ function rowItem({n,i}){
       <span class="m">${(n.tags||[]).filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}
         ${has(n.source) ? `<span>${esc(n.source)}</span>` : ""}</span>
     </span>
-    <span class="go">${detail ? "읽기 " + I.arrow : "원문 " + I.ext}</span>
+    <span class="go">${detail ? T("go_read") + " " + I.arrow : T("go_source") + " " + I.ext}</span>
   </a>`;
 }
 function cardItem({c,i}){
@@ -388,16 +417,16 @@ function cardItem({c,i}){
     <div class="card-body">
       <h3>${esc(c.title)}</h3>
       ${has(c.desc) ? `<p>${esc(c.desc)}</p>` : ""}
-      <div class="card-meta"><span>${esc(c.kind || "콘텐츠")} · <span class="mono">${fmt(c.date)}</span></span><span>${detail ? I.arrow : (isExt(href) ? I.ext : I.arrow)}</span></div>
+      <div class="card-meta"><span>${c.kind ? esc(c.kind) : T("kind_default")} · <span class="mono">${fmt(c.date)}</span></span><span>${detail ? I.arrow : (isExt(href) ? I.ext : I.arrow)}</span></div>
     </div>
   </a>`;
 }
 function tagChips(linkToNews){
   const tags = [...new Set(NEWS.flatMap(n => n.tags || []).filter(Boolean))];
   if (!tags.length) return "";
-  const list = linkToNews ? tags : ["전체", ...tags];
-  return `<div class="chips" role="toolbar" aria-label="태그">${list.map(t =>
-    `<button type="button" class="chip" data-tag="${esc(t)}" data-go="${linkToNews ? 1 : 0}" aria-pressed="${!linkToNews && ((t==="전체"&&!activeTag)||t===activeTag)}"><span class="dot"></span>${esc(t)}</button>`).join("")}</div>`;
+  const all = linkToNews ? "" : `<button type="button" class="chip" data-all="1" data-go="0" aria-pressed="${!activeTag}"><span class="dot"></span>${T("all")}</button>`;
+  return `<div class="chips" role="toolbar">${all}${tags.map(t =>
+    `<button type="button" class="chip" data-tag="${esc(t)}" data-go="${linkToNews ? 1 : 0}" aria-pressed="${!linkToNews && t===activeTag}"><span class="dot"></span>${esc(t)}</button>`).join("")}</div>`;
 }
 
 /* ---------- 화면 ---------- */
@@ -412,65 +441,65 @@ const views = {
       return `<a class="tile t-feature" href="${esc(href)}"${detail ? "" : ext(href)}>
         <div class="feature-visual">${has(feat.c.thumbnail) ? `<img src="${esc(local(feat.c.thumbnail))}" alt="">` : `<span class="big-icon">${bigIcon(feat.c.kind)}</span>`}</div>
         <div class="feature-body">
-          <div class="feature-meta"><span class="badge">${esc(feat.c.kind || "콘텐츠")}</span><span class="mono">${fmt(feat.c.date)}</span><span>새 콘텐츠</span></div>
+          <div class="feature-meta"><span class="badge">${feat.c.kind ? esc(feat.c.kind) : T("kind_default")}</span><span class="mono">${fmt(feat.c.date)}</span><span>${T("home_new_badge")}</span></div>
           <h3>${esc(feat.c.title)}</h3>
           ${has(feat.c.desc) ? `<p>${esc(feat.c.desc)}</p>` : ""}
         </div></a>`;
     })() : `<a class="tile t-feature" href="#about">
         <div class="feature-visual"><span class="big-icon">${I.power.replace('width="16" height="16"','width="26" height="26"')}</span></div>
-        <div class="feature-body"><h3>${sp.h}</h3><p>${esc(SITE.about_intro || "")}</p></div></a>`;
+        <div class="feature-body"><h3>${sp.h}</h3>${has(SITE.about_intro) ? `<p>${esc(SITE.about_intro)}</p>` : ""}</div></a>`;
     return `
       <header class="page-head"><h1>${sp.h}</h1>${sp.rest ? `<p>${sp.rest}</p>` : ""}</header>
-      <section class="bento" aria-label="한눈에 보기">
+      <section class="bento">
         ${featTile}
         <div class="tile t-news">
           <span class="label">${I.news} ${L("title_home_news")}</span>
           ${ns.length ? `<ul class="mini-list">${ns.slice(0,4).map(({n,i}) => { const h = newsHref(n,i), dt = hasDetail(n);
             return `<li><a href="${esc(h)}"${dt ? "" : ext(h)}><span class="d">${fmt(n.date)}</span><span class="tc"><span class="t">${esc(n.title)}</span>${has(n.comment) ? `<span class="cm">${esc(n.comment)}</span>` : ""}</span><span class="go">${dt ? I.arrow : I.ext}</span></a></li>`; }).join("")}</ul>`
-            : `<p class="empty">아직 올린 소식이 없습니다.</p>`}
-          <a class="tile-foot" href="#news"><span>${L("menu_news")} 전체 보기 <span class="mono">${NEWS.length}</span></span>${I.arrow}</a>
+            : `<p class="empty">${T("empty_news")}</p>`}
+          <a class="tile-foot" href="#news"><span>${L("menu_news")} ${T("view_all")} <span class="mono">${NEWS.length}</span></span>${I.arrow}</a>
         </div>
         <div class="tile t-stat">
-          <span class="label">${I.chart} 아카이브</span>
+          <span class="label">${I.chart} ${T("home_stat_title")}</span>
           <div class="stat-row">
-            <div><span class="stat-num">${NEWS.length}</span><span class="cap">소식</span></div>
-            <div><span class="stat-num">${CONTENTS.length}</span><span class="cap">콘텐츠</span></div>
+            <div><span class="stat-num">${NEWS.length}</span><span class="cap">${T("home_stat_news")}</span></div>
+            <div><span class="stat-num">${CONTENTS.length}</span><span class="cap">${T("home_stat_contents")}</span></div>
           </div>
-          ${lastDate ? `<span class="upd">마지막 업데이트 <span class="mono">${fmt(lastDate)}</span></span>` : ""}
+          ${lastDate ? `<span class="upd">${T("home_updated")} <span class="mono">${fmt(lastDate)}</span></span>` : ""}
         </div>
         <a class="tile t-promise" href="#about">
-          <span class="label">${I.power} 개인정보 수집</span>
-          <span class="stat-num">0</span>
-          <p>회원가입, 댓글, 방문자 분석 도구가 없습니다.</p>
+          <span class="label">${I.power} ${T("home_privacy_title")}</span>
+          <span class="stat-num">${T("home_privacy_num")}</span>
+          <p>${T("home_privacy_text")}</p>
         </a>
-        ${tagChips(true) ? `<div class="tile t-tags"><span class="label">${I.tag} 태그로 찾기</span>${tagChips(true)}</div>` : ""}
+        ${tagChips(true) ? `<div class="tile t-tags"><span class="label">${I.tag} ${T("home_tags_title")}</span>${tagChips(true)}</div>` : ""}
       </section>
       ${cs.length > 1 ? `<section class="sec">
-        <div class="sec-head"><h2>${L("title_home_contents")}</h2><a class="more" href="#contents">${L("menu_contents")} 전체 ${I.arrow}</a></div>
+        <div class="sec-head"><h2>${L("title_home_contents")}</h2><a class="more" href="#contents">${L("menu_contents")} ${T("view_all")} ${I.arrow}</a></div>
         <div class="cards">${cs.slice(1,9).map(cardItem).join("")}</div>
       </section>` : ""}`;
   },
   news(){
     const items = sortedNews().filter(({n}) => !activeTag || (n.tags||[]).includes(activeTag));
-    return `<header class="page-head"><h1>${L("title_news")}</h1><p><span class="mono">${NEWS.length}</span>건의 소식. 원문 링크와 함께 짧게 정리합니다.</p></header>
+    return `<header class="page-head"><h1>${L("title_news")}</h1>${D("desc_news", NEWS.length) ? `<p>${D("desc_news", NEWS.length)}</p>` : ""}</header>
       <section class="sec">${tagChips(false)}
-        ${items.length ? `<div class="list">${items.map(rowItem).join("")}</div>` : `<p class="empty">아직 올린 소식이 없습니다.</p>`}
+        ${items.length ? `<div class="list">${items.map(rowItem).join("")}</div>` : `<p class="empty">${T("empty_news")}</p>`}
       </section>`;
   },
   contents(){
     const items = sortedContents();
-    return `<header class="page-head"><h1>${L("title_contents")}</h1><p><span class="mono">${CONTENTS.length}</span>개의 콘텐츠. 직접 만든 교육 자료를 모아 둡니다.</p></header>
-      <section class="sec">${items.length ? `<div class="cards">${items.map(cardItem).join("")}</div>` : `<p class="empty">아직 올린 콘텐츠가 없습니다.</p>`}</section>`;
+    return `<header class="page-head"><h1>${L("title_contents")}</h1>${D("desc_contents", CONTENTS.length) ? `<p>${D("desc_contents", CONTENTS.length)}</p>` : ""}</header>
+      <section class="sec">${items.length ? `<div class="cards">${items.map(cardItem).join("")}</div>` : `<p class="empty">${T("empty_contents")}</p>`}</section>`;
   },
   about(){
-    return `<header class="page-head"><h1>${L("title_about")}</h1></header>
+    return `<header class="page-head"><h1>${L("title_about")}</h1>${D("desc_about", 0) ? `<p>${D("desc_about", 0)}</p>` : ""}</header>
       <figure class="sig" id="sig">
-        <video id="sig-video" muted playsinline preload="auto" aria-label="CLEAN·ON 理 시그니처 영상"></video>
-        <button type="button" class="sig-replay" id="sig-replay">${P('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>')} 다시 재생</button>
+        <video id="sig-video" muted playsinline preload="auto" aria-label="${T("site_name")}"></video>
+        <button type="button" class="sig-replay" id="sig-replay">${P('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>')} ${T("about_replay")}</button>
       </figure>
       <section class="about">
         ${has(SITE.about_intro) ? `<p class="intro">${esc(SITE.about_intro)}</p>` : ""}
-        ${(SITE.promises||[]).filter(Boolean).length ? `<div class="promise-box"><span class="label">${I.power} ${esc(SITE.promise_title || "이 사이트의 약속")}</span>
+        ${(SITE.promises||[]).filter(Boolean).length ? `<div class="promise-box"><span class="label">${I.power} ${T("promise_title")}</span>
           <ul>${SITE.promises.filter(Boolean).map(p => `<li>${I.check}<span>${esc(p)}</span></li>`).join("")}</ul></div>` : ""}
         ${has(SITE.about_note) ? `<p class="note">${esc(SITE.about_note)}</p>` : ""}
       </section>`;
@@ -482,8 +511,8 @@ function detail(type, id){
   const list = isNews ? NEWS : CONTENTS;
   const idx = list.findIndex((x,i) => (isNews ? NEWS_ID(x,i) : CONTENT_ID(x,i)) === `${type}-${id}`);
   const x = list[idx];
-  if (!x) return `<p class="empty">글을 찾을 수 없습니다. <a class="more" href="#home">처음으로</a></p>`;
-  document.title = `${x.title} · CLEAN·ON 理`;
+  if (!x) return `<p class="empty">${T("not_found")} <a class="more" href="#home">${T("back_home")}</a></p>`;
+  document.title = `${x.title} · ${raw("site_name")}`;
   const backKey = isNews ? "news" : "contents";
   const lines = String(x.summary || "").split(/\n+/).map(s => s.replace(/^\s*([-•*]|\d+[.)])\s*/, "").trim()).filter(Boolean);
   let body = has(x.body) ? clean(x.body) : "";
@@ -496,19 +525,19 @@ function detail(type, id){
   }
   const lead = isNews ? x.comment : x.desc;
   const target = isNews ? x.url : (x.file ? local(x.file) : x.url);
-  const btnText = isNews ? `${esc(x.source || "원문")} 원문 보기` : (x.file ? "콘텐츠 열기" : "바로 가기");
+  const btnText = isNews ? T("detail_btn_source", { source: esc(x.source || "") }) : (x.file ? T("detail_btn_file") : T("detail_btn_link"));
   return `<article class="article">
     <a class="back" href="#${backKey}">${I.back} ${L("menu_" + backKey)}</a>
     <header class="a-head">
-      <div class="a-meta">${isNews ? (x.tags||[]).filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join("") : `<span class="badge">${esc(x.kind || "콘텐츠")}</span>`}
+      <div class="a-meta">${isNews ? (x.tags||[]).filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join("") : `<span class="badge">${x.kind ? esc(x.kind) : T("kind_default")}</span>`}
         <span class="mono">${fmt(x.date)}</span>${isNews && has(x.source) ? `<span>· ${esc(x.source)}</span>` : ""}</div>
       <h1>${esc(x.title)}</h1>
       ${has(lead) ? `<p class="a-lead">${esc(lead)}</p>` : ""}
     </header>
-    ${lines.length ? `<section class="tldr" aria-label="3줄 요약"><span class="label">${I.check} 3줄 요약</span><ol>${lines.slice(0,5).map(l => `<li>${esc(l)}</li>`).join("")}</ol></section>` : ""}
+    ${lines.length ? `<section class="tldr" ><span class="label">${I.check} ${T("detail_summary")}</span><ol>${lines.slice(0,5).map(l => `<li>${esc(l)}</li>`).join("")}</ol></section>` : ""}
     ${quoteOutside}
     ${bodyHtml ? `<div class="prose">${bodyHtml}</div>` : ""}
-    ${has(target) ? `<div class="actions"><a class="btn primary" href="${esc(target)}"${ext(target)}>${btnText} ${isExt(target) ? I.ext : I.arrow}</a><a class="btn" href="#${backKey}">목록으로</a></div>` : ""}
+    ${has(target) ? `<div class="actions"><a class="btn primary" href="${esc(target)}"${ext(target)}>${btnText} ${isExt(target) ? I.ext : I.arrow}</a><a class="btn" href="#${backKey}">${T("detail_btn_list")}</a></div>` : ""}
   </article>`;
 }
 
@@ -544,13 +573,12 @@ function render(){
   const h = location.hash.slice(1);
   const m = h.match(/^([nc])-(.+)$/);
   let key = m ? (m[1] === "n" ? "news" : "contents") : ((h in views) ? h : "home");
-  if (!m) document.title = key === "home" ? "CLEAN·ON 理" : `${(SITE["menu_"+key] || DEFAULT_LABELS["menu_"+key])} · CLEAN·ON 理`;
+  if (!m) document.title = key === "home" ? raw("site_name") : `${raw("menu_"+key)} · ${raw("site_name")}`;
   $("#view").innerHTML = m ? detail(m[1], m[2]) : views[key]();
   renderNav(key);
   if (key === "about" && !m) setupSignature();
   document.querySelectorAll(".chip").forEach(b => b.onclick = () => {
-    const t = b.dataset.tag;
-    activeTag = t === "전체" ? null : t;
+    activeTag = b.dataset.all ? null : b.dataset.tag;
     if (b.dataset.go === "1") { keepTag = true; location.hash = "news"; } else render();
   });
 }
@@ -571,7 +599,7 @@ const isDark = () => { const t = document.documentElement.dataset.theme; return 
 function syncSwitch(){
   const on = isDark();
   $("#theme").setAttribute("aria-checked", on);
-  $("#theme-state").textContent = on ? "ON" : "OFF";
+  $("#theme-state").textContent = on ? raw("switch_on") : raw("switch_off");
 }
 (function initTheme(){
   const saved = store.get();
@@ -594,7 +622,11 @@ Promise.all([
   NEWS = Array.isArray(n) ? n : [];
   CONTENTS = Array.isArray(c) ? c : [];
   SITE = (s && typeof s === "object") ? s : {};
-  if (has(SITE.footer)) $("#footer").textContent = SITE.footer;
+  $("#footer").textContent = raw("footer");
+  $("#brand-kor").textContent = raw("brand_kor");
+  $("#dark-label").textContent = raw("dark_mode");
+  document.querySelectorAll(".logo, .logo img").forEach(el => el.setAttribute(el.tagName === "IMG" ? "alt" : "aria-label", raw("site_name")));
+  syncSwitch();
   render();
 });
 </script>
