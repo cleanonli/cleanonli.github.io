@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLEAN·ON 理</title>
+<meta name="description" content="청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.">
+<link rel="icon" href="assets/logo-light.png">
+<style>
+/* BI 가이드 컬러: Cobalt #2542D6 · Cobalt Light #5874FF · Ink #1E2128 · Ground #F4F5F8 */
+:root{
+  --bg:#ffffff;--surface:#f4f5f8;--fg:#1e2128;--muted:#5e6372;--line:#e3e5ec;
+  --accent:#2542d6;--accent-soft:#eaedfb;
+  --font-body:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#11141c;--surface:#1a1e28;--fg:#eceef3;--muted:#9a9fb0;--line:#282d3a;
+  --accent:#5874ff;--accent-soft:#1c2340;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 var(--font-body);padding:0 16px}
+.wrap{max-width:680px;margin:0 auto;padding:40px 0 64px;display:flex;flex-direction:column;gap:48px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+header{display:flex;flex-direction:column;gap:20px}
+.brand{display:flex;flex-direction:column;gap:8px;width:max-content;max-width:100%}
+.logo{display:block;width:280px;max-width:100%}
+.logo img{display:block;width:100%;height:auto}
+.kor{display:flex;justify-content:space-between;width:43%;margin-left:52%;font-size:13px;color:var(--muted);font-weight:600}
+.slogan{color:var(--muted);font-size:15px}
+nav{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px}
+nav a{text-decoration:none;padding:6px 12px;border-radius:999px;color:var(--muted);font-size:15px}
+nav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:700}
+h2{font-size:14px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0}
+section{display:flex;flex-direction:column;gap:16px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.more{font-size:14px;color:var(--accent);text-decoration:none}
+.news{list-style:none;margin:0;padding:0}
+.news li{display:grid;grid-template-columns:88px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.news li:first-child{border-top:0}
+.date{font:13px/1.9 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.news .body{min-width:0;display:flex;flex-direction:column;gap:6px}
+.news h3{margin:0;font-size:17px;line-height:1.5;text-wrap:balance}
+.comment{margin:0}
+.comment::before{content:"한 줄 코멘트";display:block;font-size:12px;color:var(--accent);font-weight:700}
+.meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted)}
+.meta a{color:var(--accent);text-decoration:none}
+.tag{background:var(--surface);border-radius:4px;padding:1px 7px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.card{display:flex;flex-direction:column;gap:8px;padding:18px;background:var(--surface);border-radius:10px;text-decoration:none;min-width:0}
+.card:hover .go{color:var(--accent)}
+.card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px}
+.kind{font-size:12px;font-weight:700;color:var(--accent)}
+.card h3{margin:0;font-size:16px;line-height:1.45}
+.card p{margin:0;font-size:14px;color:var(--muted)}
+.go{margin-top:auto;font-size:13px;color:var(--muted)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:3px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:700}
+.about p{margin:0;max-width:62ch}
+.promise{background:var(--accent-soft);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.promise strong{color:var(--accent)}
+.promise ul{margin:0;padding-left:18px}
+.empty{color:var(--muted);padding:24px 0}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:480px){.news li{grid-template-columns:1fr;gap:4px}.logo{width:220px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <a class="logo" href="#home" aria-label="CLEAN·ON 理 홈">
+        <picture>
+          <source srcset="assets/logo-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="assets/logo-light.png" alt="CLEAN·ON 理">
+        </picture>
+      </a>
+      <span class="kor" aria-hidden="true"><span>클</span><span>린</span><span>온</span><span>리</span></span>
+    </div>
+    <div class="slogan">청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.</div>
+    <nav aria-label="메뉴">
+      <a href="#home" data-view="home">처음</a>
+      <a href="#news" data-view="news">소식</a>
+      <a href="#contents" data-view="contents">콘텐츠</a>
+      <a href="#about" data-view="about">소개</a>
+    </nav>
+  </header>
+  <main id="view"><p class="empty">불러오는 중…</p></main>
+  <footer>운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 이 사이트는 GitHub Pages에서 제공되며, 외부 링크를 누르면 해당 사이트로 이동합니다.</footer>
+</div>
+
+<script>
+/* 글은 data/news.json, data/contents.json 에 저장됩니다. 관리 화면(Pages CMS)에서 고치면 됩니다. */
+let NEWS = [], CONTENTS = [], activeTag = null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const d10 = d => String(d ?? "").slice(0,10);
+const byDate = (a,b) => d10(b.date).localeCompare(d10(a.date));
+const fmt = d => d10(d).replaceAll("-", ".");
+const isExt = u => /^https?:/.test(u || "");
+const ext = u => isExt(u) ? ' target="_blank" rel="noopener noreferrer"' : '';
+const local = u => String(u||"").replace(/^\//,"");   /* /media/x → media/x */
+const link = c => c.file ? local(c.file) : (c.url || "#");
+
+function newsList(items){
+  if(!items.length) return '<p class="empty">아직 올린 소식이 없습니다.</p>';
+  return `<ul class="news">${items.map(n=>`
+    <li><div class="date">${fmt(n.date)}</div>
+      <div class="body">
+        <h3>${esc(n.title)}</h3>
+        ${n.comment?`<p class="comment">${esc(n.comment)}</p>`:''}
+        <div class="meta">
+          ${(n.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}
+          ${n.url?`<a href="${esc(n.url)}"${ext(n.url)}>${esc(n.source||"원문")} 원문 ↗</a>`:''}
+        </div>
+      </div></li>`).join("")}</ul>`;
+}
+function cardGrid(items){
+  if(!items.length) return '<p class="empty">아직 올린 콘텐츠가 없습니다.</p>';
+  return `<div class="grid">${items.map(c=>{const u=link(c);return `
+    <a class="card" href="${esc(u)}"${ext(u)}>
+      ${c.thumbnail?`<img src="${esc(local(c.thumbnail))}" alt="">`:''}
+      <span class="kind">${esc(c.kind)}</span>
+      <h3>${esc(c.title)}</h3>
+      ${c.desc?`<p>${esc(c.desc)}</p>`:''}
+      <span class="go">${fmt(c.date)} · ${isExt(u)?'바깥 링크 ↗':'보기 →'}</span>
+    </a>`}).join("")}</div>`;
+}
+const views = {
+  home: () => `
+    <section><div class="sec-head"><h2>최근 소식</h2><a class="more" href="#news">전체 보기 →</a></div>
+      ${newsList([...NEWS].sort(byDate).slice(0,3))}</section>
+    <section><div class="sec-head"><h2>콘텐츠</h2><a class="more" href="#contents">전체 보기 →</a></div>
+      ${cardGrid([...CONTENTS].sort(byDate).slice(0,3))}</section>`,
+  news: () => {
+    const tags=[...new Set(NEWS.flatMap(n=>n.tags||[]))];
+    const items=[...NEWS].sort(byDate).filter(n=>!activeTag||(n.tags||[]).includes(activeTag));
+    return `<section><h2>소식</h2>
+      ${tags.length?`<div class="filters">${["전체",...tags].map(t=>`<button type="button" data-tag="${esc(t)}" aria-pressed="${(t==="전체"&&!activeTag)||t===activeTag}">${esc(t)}</button>`).join("")}</div>`:''}
+      ${newsList(items)}</section>`;
+  },
+  contents: () => `<section><h2>콘텐츠</h2>${cardGrid([...CONTENTS].sort(byDate))}</section>`,
+  about: () => `<section class="about"><h2>소개</h2>
+      <p>CLEAN·ON 理는 청렴과 관련된 소식을 짧게 정리하고, 직접 만든 교육 콘텐츠를 꾸준히 쌓아두는 개인 아카이브입니다. 理는 옥을 결대로 다듬는다는 뜻입니다. 청렴을 켜고, 조금씩 다듬어 가는 기록을 남깁니다.</p>
+      <div class="promise"><strong>이 사이트의 약속</strong>
+        <ul>
+          <li>회원가입, 댓글, 방문자 분석 도구가 없습니다.</li>
+          <li>운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다.</li>
+          <li>영상은 직접 눌렀을 때만 유튜브로 연결됩니다.</li>
+        </ul></div>
+      <p>소식은 공식 발표와 확정된 사실을 바탕으로 정리하며, 원문은 출처 링크로 확인할 수 있습니다.</p>
+    </section>`
+};
+function render(){
+  const key=(location.hash.slice(1) in views)?location.hash.slice(1):"home";
+  $("#view").innerHTML=views[key]();
+  document.querySelectorAll("nav a").forEach(a=>a.setAttribute("aria-current",a.dataset.view===key?"page":"false"));
+  document.querySelectorAll(".filters button").forEach(b=>b.onclick=()=>{activeTag=b.dataset.tag==="전체"?null:b.dataset.tag;render();});
+}
+window.addEventListener("hashchange",()=>{activeTag=null;render();window.scrollTo(0,0);});
+Promise.all([
+  fetch("data/news.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[]),
+  fetch("data/contents.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[])
+]).then(([n,c])=>{NEWS=Array.isArray(n)?n:[];CONTENTS=Array.isArray(c)?c:[];render();});
+</script>
+</body>
+</html>

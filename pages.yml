@@ -1,0 +1,60 @@
+media: media
+
+content:
+  - name: news
+    label: 소식
+    type: file
+    path: data/news.json
+    format: json
+    list: true
+    fields:
+      - name: date
+        label: 날짜
+        type: date
+      - name: title
+        label: 제목
+        type: string
+      - name: comment
+        label: 한 줄 코멘트
+        type: text
+      - name: source
+        label: 출처 기관명
+        type: string
+      - name: url
+        label: 원문 링크
+        type: string
+      - name: tags
+        label: 태그
+        type: string
+        list: true
+
+  - name: contents
+    label: 콘텐츠
+    type: file
+    path: data/contents.json
+    format: json
+    list: true
+    fields:
+      - name: date
+        label: 날짜
+        type: date
+      - name: kind
+        label: 종류
+        type: select
+        options:
+          values: [인터랙티브, 영상, 카드뉴스, 글, 기타]
+      - name: title
+        label: 제목
+        type: string
+      - name: desc
+        label: 소개
+        type: text
+      - name: url
+        label: 바깥 링크 (유튜브 등)
+        type: string
+      - name: file
+        label: 직접 올리는 파일 (HTML·PDF 등, 바깥 링크 대신)
+        type: file
+      - name: thumbnail
+        label: 썸네일 이미지 (선택)
+        type: image
