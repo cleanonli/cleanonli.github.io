@@ -1,6 +1,32 @@
 media: media
 
 content:
+  - name: site
+    label: 사이트 문구
+    type: file
+    path: data/site.json
+    format: json
+    fields:
+      - name: slogan
+        label: 로고 아래 슬로건
+        type: string
+      - name: about_intro
+        label: 소개 페이지 첫 문단
+        type: text
+      - name: promise_title
+        label: 약속 상자 제목
+        type: string
+      - name: promises
+        label: 약속 항목
+        type: string
+        list: true
+      - name: about_note
+        label: 소개 페이지 마지막 문단
+        type: text
+      - name: footer
+        label: 맨 아래 안내문
+        type: text
+
   - name: news
     label: 소식
     type: file
@@ -58,3 +84,4 @@ content:
       - name: thumbnail
         label: 썸네일 이미지 (선택)
         type: image
+
