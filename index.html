@@ -7,163 +7,1193 @@
 <meta name="description" content="청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.">
 <link rel="icon" href="assets/logo-light.png">
 <style>
-/* BI 가이드 컬러: Cobalt #2542D6 · Cobalt Light #5874FF · Ink #1E2128 · Ground #F4F5F8 */
-:root{
-  --bg:#ffffff;--surface:#f4f5f8;--fg:#1e2128;--muted:#5e6372;--line:#e3e5ec;
-  --accent:#2542d6;--accent-soft:#eaedfb;
-  --font-body:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
-  --font-mono:ui-monospace,"SF Mono",Consolas,monospace;
+/* ==========================================================================
+   브랜드 컬러 가이드 (지정 컬러 엄격 준수)
+   Cobalt #2542D6 | Cobalt Light #5874FF | Ink #1E2128 | White #FFFFFF | Ground #F4F5F8
+   ========================================================================== */
+:root {
+  --cobalt: #2542D6;
+  --cobalt-light: #5874FF;
+  --ink: #1E2128;
+  --white: #FFFFFF;
+  --ground: #F4F5F8;
+
+  --bg: #FFFFFF;
+  --surface: #F4F5F8;
+  --surface-card: #FFFFFF;
+  --fg: #1E2128;
+  --muted: #5e6473;
+  --subtle: #878ea0;
+  --line: #e3e6ee;
+  --line-light: #eceef4;
+  
+  --accent: #2542D6;
+  --accent-soft: rgba(37, 66, 214, 0.07);
+  --accent-glow: rgba(37, 66, 214, 0.18);
+  --switch-track: #d9dce5;
+  --switch-thumb: #FFFFFF;
+
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --container-max: 960px;
 }
-@media (prefers-color-scheme: dark){:root{
-  --bg:#11141c;--surface:#1a1e28;--fg:#eceef3;--muted:#9a9fb0;--line:#282d3a;
-  --accent:#5874ff;--accent-soft:#1c2340;color-scheme:dark}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 var(--font-body);padding:0 16px}
-.wrap{max-width:680px;margin:0 auto;padding:40px 0 64px;display:flex;flex-direction:column;gap:48px}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
-header{display:flex;flex-direction:column;gap:20px}
-.brand{display:flex;flex-direction:column;gap:8px;width:max-content;max-width:100%}
-.logo{display:block;width:280px;max-width:100%}
-.logo img{display:block;width:100%;height:auto}
-.kor{display:flex;justify-content:space-between;width:43%;margin-left:52%;font-size:13px;color:var(--muted);font-weight:600}
-.slogan{color:var(--muted);font-size:15px}
-nav{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px}
-nav a{text-decoration:none;padding:6px 12px;border-radius:999px;color:var(--muted);font-size:15px}
-nav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:700}
-h2{font-size:14px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0}
-section{display:flex;flex-direction:column;gap:16px}
-.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.more{font-size:14px;color:var(--accent);text-decoration:none}
-.news{list-style:none;margin:0;padding:0}
-.news li{display:grid;grid-template-columns:88px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line)}
-.news li:first-child{border-top:0}
-.date{font:13px/1.9 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}
-.news .body{min-width:0;display:flex;flex-direction:column;gap:6px}
-.news h3{margin:0;font-size:17px;line-height:1.5;text-wrap:balance}
-.comment{margin:0}
-.comment::before{content:"한 줄 코멘트";display:block;font-size:12px;color:var(--accent);font-weight:700}
-.meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted)}
-.meta a{color:var(--accent);text-decoration:none}
-.tag{background:var(--surface);border-radius:4px;padding:1px 7px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
-.card{display:flex;flex-direction:column;gap:8px;padding:18px;background:var(--surface);border-radius:10px;text-decoration:none;min-width:0}
-.card:hover .go{color:var(--accent)}
-.card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px}
-.kind{font-size:12px;font-weight:700;color:var(--accent)}
-.card h3{margin:0;font-size:16px;line-height:1.45}
-.card p{margin:0;font-size:14px;color:var(--muted)}
-.go{margin-top:auto;font-size:13px;color:var(--muted)}
-.filters{display:flex;gap:6px;flex-wrap:wrap}
-.filters button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:3px 12px;cursor:pointer}
-.filters button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:700}
-.about p{margin:0;max-width:62ch}
-.promise{background:var(--accent-soft);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
-.promise strong{color:var(--accent)}
-.promise ul{margin:0;padding-left:18px}
-.empty{color:var(--muted);padding:24px 0}
-footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
-@media (max-width:480px){.news li{grid-template-columns:1fr;gap:4px}.logo{width:220px}}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12141a;
+    --surface: #191d26;
+    --surface-card: #1e222d;
+    --fg: #f4f5f8;
+    --muted: #9ba1b4;
+    --subtle: #697084;
+    --line: #292e3c;
+    --line-light: #212531;
+    
+    --accent: #5874FF;
+    --accent-soft: rgba(88, 116, 255, 0.12);
+    --accent-glow: rgba(88, 116, 255, 0.28);
+    --switch-track: #2f3647;
+    --switch-thumb: #f4f5f8;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #12141a;
+  --surface: #191d26;
+  --surface-card: #1e222d;
+  --fg: #f4f5f8;
+  --muted: #9ba1b4;
+  --subtle: #697084;
+  --line: #292e3c;
+  --line-light: #212531;
+  
+  --accent: #5874FF;
+  --accent-soft: rgba(88, 116, 255, 0.12);
+  --accent-glow: rgba(88, 116, 255, 0.28);
+  --switch-track: #2f3647;
+  --switch-thumb: #f4f5f8;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #FFFFFF;
+  --surface: #F4F5F8;
+  --surface-card: #FFFFFF;
+  --fg: #1E2128;
+  --muted: #5e6473;
+  --subtle: #878ea0;
+  --line: #e3e6ee;
+  --line-light: #eceef4;
+  
+  --accent: #2542D6;
+  --accent-soft: rgba(37, 66, 214, 0.07);
+  --accent-glow: rgba(37, 66, 214, 0.18);
+  --switch-track: #d9dce5;
+  --switch-thumb: #FFFFFF;
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   기본 레이아웃 및 리셋
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  letter-spacing: -0.015em;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+a { color: inherit; text-decoration: none; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wrap {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+/* ==========================================================================
+   헤더 & 상단 내비게이션
+   ========================================================================== */
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 28px;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+.brand-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.logo-anchor {
+  display: inline-block;
+  line-height: 0;
+}
+.logo-img {
+  width: 250px;
+  height: auto;
+  display: block;
+}
+.brand-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.brand-sub .hanja {
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* 다크모드 ON/OFF 스위치 모티프 */
+.theme-switch-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.theme-toggle-btn {
+  appearance: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: all 0.2s var(--ease);
+}
+.theme-toggle-btn:hover {
+  border-color: var(--accent);
+}
+.switch-indicator {
+  width: 36px;
+  height: 20px;
+  background-color: var(--switch-track);
+  border-radius: 999px;
+  position: relative;
+  transition: background-color 0.25s var(--ease);
+}
+.switch-knob {
+  width: 14px;
+  height: 14px;
+  background-color: var(--switch-thumb);
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.25s var(--ease);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+:root[data-theme="dark"] .switch-indicator { background-color: var(--accent); }
+:root[data-theme="dark"] .switch-knob { transform: translateX(16px); }
+:root[data-theme="light"] .switch-indicator { background-color: var(--switch-track); }
+:root[data-theme="light"] .switch-knob { transform: translateX(0); }
+
+/* 슬로건 에디토리얼 타이포 */
+.editorial-lead {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.slogan-title {
+  margin: 0;
+  font-size: clamp(22px, 3.2vw, 32px);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  word-break: keep-all;
+}
+.slogan-sub {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+  word-break: keep-all;
+}
+.slogan-title span.accent-text {
+  color: var(--accent);
+}
+
+/* 내비게이션 바 (토글 세그먼트 스타일) */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+nav a {
+  position: relative;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: color 0.15s ease, background-color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+nav a:hover {
+  color: var(--fg);
+  background-color: var(--surface);
+}
+nav a[aria-current="page"] {
+  color: var(--accent);
+  background-color: var(--accent-soft);
+  font-weight: 700;
+}
+nav a[aria-current="page"]::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+/* ==========================================================================
+   콘텐츠 섹션 공통 스타일
+   ========================================================================== */
+main {
+  min-height: 380px;
+}
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: enterView 0.35s var(--ease) forwards;
+}
+.view-home-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+.sec-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+  gap: 16px;
+}
+.sec-title-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+h2 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0;
+  color: var(--fg);
+}
+.sec-index {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent);
+}
+.more-btn {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.15s ease;
+}
+.more-btn:hover {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   소식 리스트 (ON 스위치 모티프 호버 효과)
+   ========================================================================== */
+.news-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.news-item {
+  position: relative;
+  background: var(--surface-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 20px;
+  align-items: flex-start;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+}
+/* 카드 호버 시 스위치 켜지는 인터랙션 */
+.news-item::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 10px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 2px;
+  background-color: transparent;
+  transition: background-color 0.2s var(--ease);
+}
+.news-item:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px var(--accent-glow);
+  transform: translateY(-1px);
+}
+.news-item:hover::before {
+  background-color: var(--accent);
+}
+.news-date {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--subtle);
+  letter-spacing: -0.01em;
+  padding-top: 2px;
+}
+.news-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.news-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  word-break: keep-all;
+}
+.news-comment {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  background-color: var(--surface);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border-left: 2px solid var(--accent);
+  word-break: keep-all;
+}
+.news-comment::before {
+  content: "운영자 코멘트";
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+.news-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 4px;
+  font-size: 13px;
+}
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag-badge {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--surface);
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line-light);
+}
+.source-link {
+  color: var(--accent);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+}
+.source-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   태그 필터 (토글 칩 스위치 모티프)
+   ========================================================================== */
+.filters-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 4px 0;
+}
+.filter-chip {
+  appearance: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s var(--ease);
+}
+.filter-chip:hover {
+  color: var(--fg);
+  border-color: var(--subtle);
+}
+/* 토글 ON 상태 */
+.filter-chip[aria-pressed="true"] {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
+  box-shadow: 0 2px 10px var(--accent-glow);
+}
+.filter-chip .chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--subtle);
+  transition: background-color 0.2s var(--ease);
+}
+.filter-chip[aria-pressed="true"] .chip-dot {
+  background-color: #FFFFFF;
+}
+
+/* ==========================================================================
+   콘텐츠 카드 그리드 (1~2개일 때도 어색하지 않은 유연한 구조)
+   ========================================================================== */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+}
+/* 개수가 적을 때 너무 거대해지는 것을 방지하는 스마트 맥스폭 */
+.content-grid.single-item {
+  grid-template-columns: minmax(auto, 540px);
+}
+.content-grid.double-item {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 420px));
+}
+
+.content-card {
+  position: relative;
+  background: var(--surface-card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+  overflow: hidden;
+}
+/* 카드 상단 ON 인디케이터 라인 */
+.content-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+.content-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 6px 24px var(--accent-glow);
+  transform: translateY(-2px);
+}
+.content-card:hover::after {
+  opacity: 1;
+}
+
+.card-thumb-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s var(--ease);
+}
+.content-card:hover .card-thumb {
+  transform: scale(1.03);
+}
+/* 썸네일이 없을 때의 세련된 모티프 그래픽 */
+.thumb-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--surface) 0%, var(--accent-soft) 100%);
+  color: var(--muted);
+}
+.thumb-fallback svg {
+  width: 32px;
+  height: 32px;
+  stroke: var(--accent);
+}
+
+.card-header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.kind-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+.card-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--subtle);
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-grow: 1;
+}
+.card-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--fg);
+  word-break: keep-all;
+}
+.card-desc {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: keep-all;
+}
+.card-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.content-card:hover .card-footer {
+  color: var(--accent);
+}
+.action-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.2s var(--ease);
+}
+.content-card:hover .action-icon {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   소개 화면 (Editorial Manifesto)
+   ========================================================================== */
+.about-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  max-width: 760px;
+}
+.about-intro-box {
+  border-left: 3px solid var(--accent);
+  padding-left: 20px;
+}
+.about-intro-text {
+  font-size: clamp(17px, 2.2vw, 20px);
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--fg);
+  margin: 0;
+  word-break: keep-all;
+}
+.promises-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.promises-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.promises-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.promises-list li {
+  position: relative;
+  padding-left: 24px;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--fg);
+  word-break: keep-all;
+}
+.promises-list li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+}
+.about-note-box {
+  padding: 18px 20px;
+  border-radius: 10px;
+  background-color: var(--accent-soft);
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.about-note-box p {
+  margin: 0;
+  word-break: keep-all;
+}
+
+/* ==========================================================================
+   빈 상태 및 푸터
+   ========================================================================== */
+.empty-box {
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--subtle);
+  font-size: 15px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px dashed var(--line);
+}
+footer {
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   애니메이션 & 접근성 (prefers-reduced-motion)
+   ========================================================================== */
+@keyframes enterView {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   반응형 모바일 미디어 쿼리 (가로스크롤 방지)
+   ========================================================================== */
+@media (max-width: 640px) {
+  .wrap {
+    padding: 24px 16px 60px;
+    gap: 40px;
+  }
+  .header-top {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .theme-switch-wrap {
+    align-self: flex-end;
+  }
+  .logo-img {
+    width: 200px;
+  }
+  .news-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 16px;
+  }
+  .news-date {
+    padding-top: 0;
+  }
+  .news-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .source-link {
+    margin-left: 0;
+  }
+  .promises-card {
+    padding: 20px;
+  }
+}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <!-- 헤더 영역 -->
   <header>
-    <div class="brand">
-      <a class="logo" href="#home" aria-label="CLEAN·ON 理 홈">
-        <picture>
-          <source srcset="assets/logo-dark.png" media="(prefers-color-scheme: dark)">
-          <img src="assets/logo-light.png" alt="CLEAN·ON 理">
-        </picture>
-      </a>
-      <span class="kor" aria-hidden="true"><span>클</span><span>린</span><span>온</span><span>리</span></span>
+    <div class="header-top">
+      <div class="brand-group">
+        <a class="logo-anchor" href="#home" aria-label="CLEAN·ON 理 홈으로 이동">
+          <picture>
+            <img class="logo-img" id="main-logo" src="assets/logo-light.png" alt="CLEAN·ON 理">
+          </picture>
+        </a>
+        <div class="brand-sub">
+          <span>클린온리</span>
+          <span class="hanja" title="옥을 결대로 다듬다">理</span>
+        </div>
+      </div>
+
+      <!-- 다크모드 ON/OFF 스위치 -->
+      <div class="theme-switch-wrap">
+        <button type="button" class="theme-toggle-btn" id="theme-toggle" role="switch" aria-checked="false" aria-label="화면 모드 전환">
+          <div class="switch-indicator">
+            <div class="switch-knob"></div>
+          </div>
+          <span id="theme-label">ON / OFF</span>
+        </button>
+      </div>
     </div>
-    <div class="slogan" id="slogan">청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.</div>
-    <nav aria-label="메뉴">
-      <a href="#home" data-view="home">처음</a>
-      <a href="#news" data-view="news">소식</a>
-      <a href="#contents" data-view="contents">콘텐츠</a>
-      <a href="#about" data-view="about">소개</a>
+
+    <div class="editorial-lead">
+      <h1 class="slogan-title" id="slogan">청렴을 켜고, <span class="accent-text">다듬는다.</span></h1>
+      <p class="slogan-sub" id="slogan-sub">청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.</p>
+    </div>
+
+    <nav aria-label="메인 메뉴">
+      <a href="#home" data-view="home">
+        <span>처음</span>
+      </a>
+      <a href="#news" data-view="news">
+        <span>소식</span>
+      </a>
+      <a href="#contents" data-view="contents">
+        <span>콘텐츠</span>
+      </a>
+      <a href="#about" data-view="about">
+        <span>소개</span>
+      </a>
     </nav>
   </header>
-  <main id="view"><p class="empty">불러오는 중…</p></main>
-  <footer id="footer">운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 이 사이트는 GitHub Pages에서 제공되며, 외부 링크를 누르면 해당 사이트로 이동합니다.</footer>
+
+  <!-- 메인 뷰 컨테이너 -->
+  <main id="view">
+    <div class="empty-box">데이터를 불러오는 중입니다…</div>
+  </main>
+
+  <!-- 푸터 -->
+  <footer>
+    <div id="footer">운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 이 사이트는 GitHub Pages에서 제공되며, 외부 링크를 누르면 해당 사이트로 이동합니다.</div>
+  </footer>
 </div>
 
 <script>
-/* 글은 data/news.json, data/contents.json 에 저장됩니다. 관리 화면(Pages CMS)에서 고치면 됩니다. */
-/* 소개 문구는 data/site.json (관리 화면의 "사이트 문구") */
+/**
+ * CLEAN·ON 理 - 프론트엔드 엔진
+ */
 let NEWS = [], CONTENTS = [], SITE = {}, activeTag = null;
+
 const $ = s => document.querySelector(s);
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const d10 = d => String(d ?? "").slice(0,10);
-const byDate = (a,b) => d10(b.date).localeCompare(d10(a.date));
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const d10 = d => String(d ?? "").slice(0, 10);
+const byDate = (a, b) => d10(b.date).localeCompare(d10(a.date));
 const fmt = d => d10(d).replaceAll("-", ".");
-const isExt = u => /^https?:/.test(u || "");
+const isExt = u => /^https?:/i.test(u || "");
 const ext = u => isExt(u) ? ' target="_blank" rel="noopener noreferrer"' : '';
-const local = u => String(u||"").replace(/^\//,"");   /* /media/x → media/x */
+const local = u => String(u || "").replace(/^\//, "");
 const link = c => c.file ? local(c.file) : (c.url || "#");
 
-function newsList(items){
-  if(!items.length) return '<p class="empty">아직 올린 소식이 없습니다.</p>';
-  return `<ul class="news">${items.map(n=>`
-    <li><div class="date">${fmt(n.date)}</div>
-      <div class="body">
-        <h3>${esc(n.title)}</h3>
-        ${n.comment?`<p class="comment">${esc(n.comment)}</p>`:''}
-        <div class="meta">
-          ${(n.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}
-          ${n.url?`<a href="${esc(n.url)}"${ext(n.url)}>${esc(n.source||"원문")} 원문 ↗</a>`:''}
-        </div>
-      </div></li>`).join("")}</ul>`;
+// 인라인 SVG 아이콘 팩 (외부 라이브러리 사용 배제)
+const ICONS = {
+  extLink: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
+  arrowRight: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`,
+  contentPlaceholder: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`
+};
+
+/* 소식 목록 렌더링 */
+function newsList(items) {
+  if (!items || !items.length) {
+    return '<div class="empty-box">등록된 소식이 없습니다.</div>';
+  }
+  return `
+    <ul class="news-list">
+      ${items.map(n => `
+        <li class="news-item">
+          <div class="news-date">${fmt(n.date)}</div>
+          <div class="news-content">
+            <h3 class="news-title">${esc(n.title)}</h3>
+            ${n.comment ? `<p class="news-comment">${esc(n.comment)}</p>` : ''}
+            <div class="news-meta">
+              ${(n.tags && n.tags.length) ? `
+                <div class="tags-wrap">
+                  ${n.tags.map(t => `<span class="tag-badge">#${esc(t)}</span>`).join("")}
+                </div>` : ''}
+              ${n.url ? `
+                <a href="${esc(n.url)}" class="source-link"${ext(n.url)}>
+                  <span>${esc(n.source || "원문 출처")}</span>
+                  ${ICONS.extLink}
+                </a>` : ''}
+            </div>
+          </div>
+        </li>
+      `).join("")}
+    </ul>
+  `;
 }
-function cardGrid(items){
-  if(!items.length) return '<p class="empty">아직 올린 콘텐츠가 없습니다.</p>';
-  return `<div class="grid">${items.map(c=>{const u=link(c);return `
-    <a class="card" href="${esc(u)}"${ext(u)}>
-      ${c.thumbnail?`<img src="${esc(local(c.thumbnail))}" alt="">`:''}
-      <span class="kind">${esc(c.kind)}</span>
-      <h3>${esc(c.title)}</h3>
-      ${c.desc?`<p>${esc(c.desc)}</p>`:''}
-      <span class="go">${fmt(c.date)} · ${isExt(u)?'바깥 링크 ↗':'보기 →'}</span>
-    </a>`}).join("")}</div>`;
+
+/* 콘텐츠 그리드 렌더링 (1~2개일 때도 안정적인 레이아웃 클래스 부여) */
+function cardGrid(items) {
+  if (!items || !items.length) {
+    return '<div class="empty-box">등록된 콘텐츠가 없습니다.</div>';
+  }
+  const lengthClass = items.length === 1 ? ' single-item' : (items.length === 2 ? ' double-item' : '');
+  
+  return `
+    <div class="content-grid${lengthClass}">
+      ${items.map(c => {
+        const targetUrl = link(c);
+        const external = isExt(targetUrl);
+        return `
+          <a class="content-card" href="${esc(targetUrl)}"${ext(targetUrl)}>
+            <div class="card-thumb-wrap">
+              ${c.thumbnail ? `
+                <img class="card-thumb" src="${esc(local(c.thumbnail))}" alt="" loading="lazy">
+              ` : `
+                <div class="thumb-fallback">
+                  ${ICONS.contentPlaceholder}
+                  <span style="font-size:11px;font-weight:600;">CLEAN·ON 理</span>
+                </div>
+              `}
+            </div>
+            <div class="card-header-meta">
+              <span class="kind-badge">${esc(c.kind || "콘텐츠")}</span>
+              <span class="card-date">${fmt(c.date)}</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">${esc(c.title)}</h3>
+              ${c.desc ? `<p class="card-desc">${esc(c.desc)}</p>` : ''}
+            </div>
+            <div class="card-footer">
+              <span>${external ? '원문 확인' : '자세히 보기'}</span>
+              <span class="action-icon">
+                ${external ? ICONS.extLink : ICONS.arrowRight}
+              </span>
+            </div>
+          </a>
+        `;
+      }).join("")}
+    </div>
+  `;
 }
+
+/* 라우트별 뷰 */
 const views = {
   home: () => `
-    <section><div class="sec-head"><h2>최근 소식</h2><a class="more" href="#news">전체 보기 →</a></div>
-      ${newsList([...NEWS].sort(byDate).slice(0,3))}</section>
-    <section><div class="sec-head"><h2>콘텐츠</h2><a class="more" href="#contents">전체 보기 →</a></div>
-      ${cardGrid([...CONTENTS].sort(byDate).slice(0,3))}</section>`,
+    <div class="view-home-wrap">
+      <section>
+        <div class="sec-head">
+          <div class="sec-title-wrap">
+            <span class="sec-index">01</span>
+            <h2>최근 소식</h2>
+          </div>
+          <a class="more-btn" href="#news">소식 전체 보기 ${ICONS.arrowRight}</a>
+        </div>
+        ${newsList([...NEWS].sort(byDate).slice(0, 3))}
+      </section>
+
+      <section>
+        <div class="sec-head">
+          <div class="sec-title-wrap">
+            <span class="sec-index">02</span>
+            <h2>아카이브 콘텐츠</h2>
+          </div>
+          <a class="more-btn" href="#contents">콘텐츠 전체 보기 ${ICONS.arrowRight}</a>
+        </div>
+        ${cardGrid([...CONTENTS].sort(byDate).slice(0, 3))}
+      </section>
+    </div>
+  `,
+
   news: () => {
-    const tags=[...new Set(NEWS.flatMap(n=>n.tags||[]))];
-    const items=[...NEWS].sort(byDate).filter(n=>!activeTag||(n.tags||[]).includes(activeTag));
-    return `<section><h2>소식</h2>
-      ${tags.length?`<div class="filters">${["전체",...tags].map(t=>`<button type="button" data-tag="${esc(t)}" aria-pressed="${(t==="전체"&&!activeTag)||t===activeTag}">${esc(t)}</button>`).join("")}</div>`:''}
-      ${newsList(items)}</section>`;
+    const allTags = [...new Set(NEWS.flatMap(n => n.tags || []).filter(Boolean))];
+    const items = [...NEWS].sort(byDate).filter(n => !activeTag || (n.tags || []).includes(activeTag));
+    return `
+      <section>
+        <div class="sec-head">
+          <div class="sec-title-wrap">
+            <span class="sec-index">ARCHIVE</span>
+            <h2>청렴 소식</h2>
+          </div>
+        </div>
+        ${allTags.length ? `
+          <div class="filters-bar" role="toolbar" aria-label="소식 태그 필터">
+            <button type="button" class="filter-chip" data-tag="전체" aria-pressed="${!activeTag}">
+              <span class="chip-dot"></span>전체
+            </button>
+            ${allTags.map(tag => `
+              <button type="button" class="filter-chip" data-tag="${esc(tag)}" aria-pressed="${activeTag === tag}">
+                <span class="chip-dot"></span>${esc(tag)}
+              </button>
+            `).join("")}
+          </div>
+        ` : ''}
+        ${newsList(items)}
+      </section>
+    `;
   },
-  contents: () => `<section><h2>콘텐츠</h2>${cardGrid([...CONTENTS].sort(byDate))}</section>`,
-  about: () => `<section class="about"><h2>소개</h2>
-      ${SITE.about_intro?`<p>${esc(SITE.about_intro)}</p>`:''}
-      ${(SITE.promises||[]).length?`<div class="promise"><strong>${esc(SITE.promise_title||"이 사이트의 약속")}</strong>
-        <ul>${SITE.promises.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`:''}
-      ${SITE.about_note?`<p>${esc(SITE.about_note)}</p>`:''}
-    </section>`
+
+  contents: () => `
+    <section>
+      <div class="sec-head">
+        <div class="sec-title-wrap">
+          <span class="sec-index">ARCHIVE</span>
+          <h2>교육 콘텐츠</h2>
+        </div>
+      </div>
+      ${cardGrid([...CONTENTS].sort(byDate))}
+    </section>
+  `,
+
+  about: () => `
+    <section>
+      <div class="sec-head">
+        <div class="sec-title-wrap">
+          <span class="sec-index">ABOUT</span>
+          <h2>소개</h2>
+        </div>
+      </div>
+      <div class="about-wrap">
+        ${SITE.about_intro ? `
+          <div class="about-intro-box">
+            <p class="about-intro-text">${esc(SITE.about_intro)}</p>
+          </div>
+        ` : ''}
+
+        ${(SITE.promises && SITE.promises.length) ? `
+          <div class="promises-card">
+            <h3 class="promises-title">
+              <span>●</span>
+              ${esc(SITE.promise_title || "CLEAN·ON 理의 약속")}
+            </h3>
+            <ul class="promises-list">
+              ${SITE.promises.map(p => `<li>${esc(p)}</li>`).join("")}
+            </ul>
+          </div>
+        ` : ''}
+
+        ${SITE.about_note ? `
+          <div class="about-note-box">
+            <p>${esc(SITE.about_note)}</p>
+          </div>
+        ` : ''}
+      </div>
+    </section>
+  `
 };
-function render(){
-  const key=(location.hash.slice(1) in views)?location.hash.slice(1):"home";
-  $("#view").innerHTML=views[key]();
-  document.querySelectorAll("nav a").forEach(a=>a.setAttribute("aria-current",a.dataset.view===key?"page":"false"));
-  document.querySelectorAll(".filters button").forEach(b=>b.onclick=()=>{activeTag=b.dataset.tag==="전체"?null:b.dataset.tag;render();});
+
+/* 화면 렌더링 및 이벤트 바인딩 */
+function render() {
+  const hash = location.hash.replace(/^#/, "");
+  const viewKey = (hash in views) ? hash : "home";
+  
+  $("#view").innerHTML = views[viewKey]();
+
+  document.querySelectorAll("nav a").forEach(a => {
+    a.setAttribute("aria-current", a.dataset.view === viewKey ? "page" : "false");
+  });
+
+  // 태그 필터 칩 토글 이벤트
+  document.querySelectorAll(".filters-bar .filter-chip").forEach(btn => {
+    btn.onclick = () => {
+      const selected = btn.dataset.tag;
+      activeTag = (selected === "전체") ? null : selected;
+      render();
+    };
+  });
 }
-window.addEventListener("hashchange",()=>{activeTag=null;render();window.scrollTo(0,0);});
+
+/* 다크모드 수동 토글 및 동기화 */
+function syncThemeUI(theme) {
+  const isDark = theme === "dark";
+  $("#theme-toggle").setAttribute("aria-checked", isDark ? "true" : "false");
+  $("#theme-label").textContent = isDark ? "DARK ON" : "LIGHT ON";
+  
+  // 수동 토글 시 picture 태그 내 기본 이미지 소스도 일관되게 갱신
+  const logo = $("#main-logo");
+  if (logo) {
+    logo.src = isDark ? "assets/logo-dark.png" : "assets/logo-light.png";
+  }
+}
+
+const store = {
+  get(){ try { return localStorage.getItem("cleanon_theme"); } catch(e) { return null; } },
+  set(v){ try { localStorage.setItem("cleanon_theme", v); } catch(e) {} }
+};
+function initTheme() {
+  const saved = store.get();
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const initialTheme = saved || (prefersDark ? "dark" : "light");
+
+  document.documentElement.setAttribute("data-theme", initialTheme);
+  syncThemeUI(initialTheme);
+
+  $("#theme-toggle").onclick = () => {
+    const current = document.documentElement.getAttribute("data-theme") || (prefersDark ? "dark" : "light");
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    store.set(next);
+    syncThemeUI(next);
+  };
+
+  // OS 테마 설정 변경 감지 (수동 설정이 없을 때)
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+    if (!store.get()) {
+      const mode = e.matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", mode);
+      syncThemeUI(mode);
+    }
+  });
+}
+
+// 라우트 변경 리스너
+window.addEventListener("hashchange", () => {
+  activeTag = null;
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// 초기 구동
+initTheme();
+
 Promise.all([
-  fetch("data/news.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[]),
-  fetch("data/contents.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[]),
-  fetch("data/site.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>({}))
-]).then(([n,c,st])=>{
-  NEWS=Array.isArray(n)?n:[]; CONTENTS=Array.isArray(c)?c:[]; SITE=st||{};
-  if(SITE.slogan) $("#slogan").textContent=SITE.slogan;
-  if(SITE.footer) $("#footer").textContent=SITE.footer;
+  fetch("data/news.json", { cache: "no-store" }).then(r => r.json()).catch(() => []),
+  fetch("data/contents.json", { cache: "no-store" }).then(r => r.json()).catch(() => []),
+  fetch("data/site.json", { cache: "no-store" }).then(r => r.json()).catch(() => ({}))
+]).then(([newsData, contentsData, siteData]) => {
+  NEWS = Array.isArray(newsData) ? newsData : [];
+  CONTENTS = Array.isArray(contentsData) ? contentsData : [];
+  SITE = siteData || {};
+
+  if (SITE.slogan) {
+    /* 첫 문장은 큰 제목(쉼표 뒤는 코발트), 나머지는 작은 설명으로 */
+    const m = SITE.slogan.match(/^(.+?[.!?。])\s+(.+)$/);
+    const head = m ? m[1] : SITE.slogan, rest = m ? m[2] : "";
+    const c = head.indexOf(",");
+    $("#slogan").innerHTML = c > 0
+      ? `${esc(head.slice(0, c + 1))} <span class="accent-text">${esc(head.slice(c + 1).trim())}</span>`
+      : esc(head);
+    $("#slogan-sub").textContent = rest;
+    $("#slogan-sub").hidden = !rest;
+  }
+  if (SITE.footer) {
+    $("#footer").textContent = SITE.footer;
+  }
   render();
 });
 </script>
