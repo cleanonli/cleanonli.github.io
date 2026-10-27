@@ -171,6 +171,49 @@ a.row:hover h3{color:var(--accent)}
 .row .go{color:var(--subtle);padding-top:3px;display:inline-flex;align-items:center;gap:4px;font-size:12.5px;white-space:nowrap}
 a.row:hover .go{color:var(--accent)}
 
+
+/* ---------- 목록 벤토 (소식·콘텐츠) ---------- */
+.lb{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;grid-auto-flow:row dense}
+.lb .s4{grid-column:span 4}.lb .s2{grid-column:span 2}.lb .s2r2{grid-column:span 2;grid-row:span 2}.lb .s1{grid-column:span 1}
+.nt{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0;transition:border-color .15s var(--ease),background .15s var(--ease)}
+.nt:hover{border-color:var(--line-2);background:var(--card-2)}
+.nt .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--subtle)}
+.nt .top .mono{color:var(--subtle)}
+.nt h3{margin:0;font-size:15.5px;font-weight:650;line-height:1.45;letter-spacing:-.015em;word-break:keep-all}
+.nt:hover h3{color:var(--accent)}
+.nt .cm{margin:0;font-size:13.5px;color:var(--muted);line-height:1.6;word-break:keep-all;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nt .sum{margin:4px 0 0;padding:12px 14px;list-style:none;counter-reset:t;display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:9px;background:var(--card-2)}
+.nt .sum li{counter-increment:t;display:grid;grid-template-columns:20px 1fr;gap:6px;font-size:13.5px;word-break:keep-all}
+.nt .sum li::before{content:counter(t);font:700 11px/19px var(--mono);color:var(--accent);background:var(--accent-soft);border-radius:5px;text-align:center;height:19px}
+.nt .foot{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--subtle)}
+.nt .foot .go{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.nt:hover .foot .go{color:var(--accent)}
+.nt.s2r2 h3{font-size:22px;line-height:1.35;letter-spacing:-.025em}
+.nt.s2r2 .cm{font-size:15px;-webkit-line-clamp:5}
+.nt.s4 h3{font-size:19px}
+.nt.s1 .cm{-webkit-line-clamp:4}
+/* 콘텐츠 타일 */
+.ct{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;min-width:0;transition:border-color .15s var(--ease),background .15s var(--ease)}
+.ct:hover{border-color:var(--line-2);background:var(--card-2)}
+.ct .vis{position:relative;aspect-ratio:16/9;border-bottom:1px solid var(--line);background-color:var(--card-2);background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:16px 16px;display:grid;place-items:center;flex:none}
+.ct .vis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ct .vis .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--accent);color:var(--on-accent)}
+.ct .bd{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.ct .top{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--subtle)}
+.ct h3{margin:0;font-size:15.5px;font-weight:650;line-height:1.4;word-break:keep-all}
+.ct:hover h3{color:var(--accent)}
+.ct p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.6;word-break:keep-all;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ct .foot{margin-top:auto;padding-top:8px;display:flex;justify-content:flex-end;color:var(--subtle)}
+.ct:hover .foot{color:var(--accent)}
+.ct.s2r2 h3{font-size:22px;letter-spacing:-.025em}
+.ct.s2r2 .vis .ic{width:56px;height:56px;border-radius:14px}
+/* 중간 크기 콘텐츠: 가로 배치 */
+.ct.s2{flex-direction:row}
+.ct.s2 .vis{aspect-ratio:auto;width:42%;border-bottom:0;border-right:1px solid var(--line)}
+.ct.s4{flex-direction:row}
+.ct.s4 .vis{aspect-ratio:16/9;width:46%;border-bottom:0;border-right:1px solid var(--line)}
+.ct.s4 h3{font-size:22px}
+
 /* ---------- 에디토리얼 상세 ---------- */
 .article{max-width:720px;display:flex;flex-direction:column;gap:28px}
 .back{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;color:var(--muted);width:max-content}
@@ -227,6 +270,8 @@ a.row:hover .go{color:var(--accent)}
 /* ---------- 반응형 ---------- */
 @media (max-width:980px){
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lb{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lb .s4,.lb .s2,.lb .s2r2{grid-column:span 2;grid-row:auto}
   .t-feature{grid-row:auto}
   .feature-visual{aspect-ratio:auto;height:220px}
   .t-tags{grid-column:span 2}
@@ -249,6 +294,10 @@ a.row:hover .go{color:var(--accent)}
 @media (max-width:560px){
   .bento{grid-template-columns:minmax(0,1fr)}
   .t-feature,.t-news,.t-stat,.t-promise,.t-tags{grid-column:auto;grid-row:auto}
+  .lb{grid-template-columns:minmax(0,1fr)}
+  .lb .s4,.lb .s2,.lb .s2r2,.lb .s1{grid-column:auto;grid-row:auto}
+  .ct.s2,.ct.s4{flex-direction:column}
+  .ct.s2 .vis,.ct.s4 .vis{width:100%;aspect-ratio:16/9;border-right:0;border-bottom:1px solid var(--line)}
   .row{grid-template-columns:minmax(0,1fr);gap:6px;padding:16px}
   .row .go{display:none}
   .mini-list a{grid-template-columns:minmax(0,1fr);gap:2px}
@@ -432,6 +481,51 @@ function tagChips(linkToNews){
     `<button type="button" class="chip" data-tag="${esc(t)}" data-go="${linkToNews ? 1 : 0}" aria-pressed="${!linkToNews && t===activeTag}"><span class="dot"></span>${esc(t)}</button>`).join("")}</div>`;
 }
 
+
+/* ---------- 목록 벤토: 순서에 따라 크기 자동 결정 ----------
+   1개: 가로 전체 / 2개: 반반 / 3개 이상: 첫 글 크게, 다음 2개 중간, 나머지 작게.
+   마지막 줄이 비지 않도록 남는 칸은 넓혀서 채움 */
+function layoutSizes(n){
+  if (n <= 0) return [];
+  if (n === 1) return ["s4"];
+  if (n === 2) return ["s2","s2"];
+  const out = ["s2r2","s2","s2"], k = n - 3, r = k % 4;
+  for (let j = 0; j < k - r; j++) out.push("s1");
+  if (r === 1) out.push("s4");
+  if (r === 2) out.push("s2","s2");
+  if (r === 3) out.push("s2","s1","s1");
+  return out;
+}
+function summaryLines(x){
+  return String(x.summary || "").split(/\n+/).map(s => s.replace(/^\s*([-•*]|\d+[.)])\s*/, "").trim()).filter(Boolean);
+}
+function newsTile({n,i}, size){
+  const href = newsHref(n,i), detail = hasDetail(n);
+  const big = size === "s2r2" || size === "s4";
+  const lines = big ? summaryLines(n).slice(0,3) : [];
+  return `<a class="nt ${size}" href="${esc(href)}"${detail ? "" : ext(href)}>
+    <div class="top"><span class="mono">${fmt(n.date)}</span>${(n.tags||[]).filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+    <h3>${esc(n.title)}</h3>
+    ${has(n.comment) ? `<p class="cm">${esc(n.comment)}</p>` : ""}
+    ${lines.length ? `<ol class="sum">${lines.map(l=>`<li>${esc(l)}</li>`).join("")}</ol>` : ""}
+    <div class="foot"><span>${has(n.source) ? esc(n.source) : ""}</span><span class="go">${detail ? T("go_read") + " " + I.arrow : T("go_source") + " " + I.ext}</span></div>
+  </a>`;
+}
+function contentTile({c,i}, size){
+  const href = contentHref(c,i), detail = hasDetail(c);
+  const icon = size === "s2r2" ? bigIcon(c.kind) : kindIcon(c.kind).replace('width="16" height="16"','width="20" height="20"');
+  return `<a class="ct ${size}" href="${esc(href)}"${detail ? "" : ext(href)}>
+    <div class="vis">${has(c.thumbnail) ? `<img src="${esc(local(c.thumbnail))}" alt="" loading="lazy">` : `<span class="ic">${icon}</span>`}</div>
+    <div class="bd">
+      <div class="top"><span class="badge">${c.kind ? esc(c.kind) : T("kind_default")}</span><span class="mono">${fmt(c.date)}</span></div>
+      <h3>${esc(c.title)}</h3>
+      ${has(c.desc) ? `<p>${esc(c.desc)}</p>` : ""}
+      <div class="foot">${detail || !isExt(href) ? I.arrow : I.ext}</div>
+    </div>
+  </a>`;
+}
+const bentoList = (items, tile) => { const sz = layoutSizes(items.length); return `<div class="lb">${items.map((it,j) => tile(it, sz[j])).join("")}</div>`; };
+
 /* ---------- 화면 ---------- */
 const views = {
   home(){
@@ -486,13 +580,13 @@ const views = {
     const items = sortedNews().filter(({n}) => !activeTag || (n.tags||[]).includes(activeTag));
     return `<header class="page-head"><h1>${L("title_news")}</h1>${D("desc_news", NEWS.length) ? `<p>${D("desc_news", NEWS.length)}</p>` : ""}</header>
       <section class="sec">${tagChips(false)}
-        ${items.length ? `<div class="list">${items.map(rowItem).join("")}</div>` : `<p class="empty">${T("empty_news")}</p>`}
+        ${items.length ? bentoList(items, newsTile) : `<p class="empty">${T("empty_news")}</p>`}
       </section>`;
   },
   contents(){
     const items = sortedContents();
     return `<header class="page-head"><h1>${L("title_contents")}</h1>${D("desc_contents", CONTENTS.length) ? `<p>${D("desc_contents", CONTENTS.length)}</p>` : ""}</header>
-      <section class="sec">${items.length ? `<div class="cards">${items.map(cardItem).join("")}</div>` : `<p class="empty">${T("empty_contents")}</p>`}</section>`;
+      <section class="sec">${items.length ? bentoList(items, contentTile) : `<p class="empty">${T("empty_contents")}</p>`}</section>`;
   },
   about(){
     return `<header class="page-head"><h1>${L("title_about")}</h1>${D("desc_about", 0) ? `<p>${D("desc_about", 0)}</p>` : ""}</header>
