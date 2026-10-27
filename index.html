@@ -78,7 +78,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
       </a>
       <span class="kor" aria-hidden="true"><span>클</span><span>린</span><span>온</span><span>리</span></span>
     </div>
-    <div class="slogan">청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.</div>
+    <div class="slogan" id="slogan">청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.</div>
     <nav aria-label="메뉴">
       <a href="#home" data-view="home">처음</a>
       <a href="#news" data-view="news">소식</a>
@@ -87,12 +87,13 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     </nav>
   </header>
   <main id="view"><p class="empty">불러오는 중…</p></main>
-  <footer>운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 이 사이트는 GitHub Pages에서 제공되며, 외부 링크를 누르면 해당 사이트로 이동합니다.</footer>
+  <footer id="footer">운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 이 사이트는 GitHub Pages에서 제공되며, 외부 링크를 누르면 해당 사이트로 이동합니다.</footer>
 </div>
 
 <script>
 /* 글은 data/news.json, data/contents.json 에 저장됩니다. 관리 화면(Pages CMS)에서 고치면 됩니다. */
-let NEWS = [], CONTENTS = [], activeTag = null;
+/* 소개 문구는 data/site.json (관리 화면의 "사이트 문구") */
+let NEWS = [], CONTENTS = [], SITE = {}, activeTag = null;
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const d10 = d => String(d ?? "").slice(0,10);
@@ -142,14 +143,10 @@ const views = {
   },
   contents: () => `<section><h2>콘텐츠</h2>${cardGrid([...CONTENTS].sort(byDate))}</section>`,
   about: () => `<section class="about"><h2>소개</h2>
-      <p>CLEAN·ON 理는 청렴과 관련된 소식을 짧게 정리하고, 직접 만든 교육 콘텐츠를 꾸준히 쌓아두는 개인 아카이브입니다. 理는 옥을 결대로 다듬는다는 뜻입니다. 청렴을 켜고, 조금씩 다듬어 가는 기록을 남깁니다.</p>
-      <div class="promise"><strong>이 사이트의 약속</strong>
-        <ul>
-          <li>회원가입, 댓글, 방문자 분석 도구가 없습니다.</li>
-          <li>운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다.</li>
-          <li>영상은 직접 눌렀을 때만 유튜브로 연결됩니다.</li>
-        </ul></div>
-      <p>소식은 공식 발표와 확정된 사실을 바탕으로 정리하며, 원문은 출처 링크로 확인할 수 있습니다.</p>
+      ${SITE.about_intro?`<p>${esc(SITE.about_intro)}</p>`:''}
+      ${(SITE.promises||[]).length?`<div class="promise"><strong>${esc(SITE.promise_title||"이 사이트의 약속")}</strong>
+        <ul>${SITE.promises.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`:''}
+      ${SITE.about_note?`<p>${esc(SITE.about_note)}</p>`:''}
     </section>`
 };
 function render(){
@@ -161,8 +158,14 @@ function render(){
 window.addEventListener("hashchange",()=>{activeTag=null;render();window.scrollTo(0,0);});
 Promise.all([
   fetch("data/news.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[]),
-  fetch("data/contents.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[])
-]).then(([n,c])=>{NEWS=Array.isArray(n)?n:[];CONTENTS=Array.isArray(c)?c:[];render();});
+  fetch("data/contents.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[]),
+  fetch("data/site.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>({}))
+]).then(([n,c,st])=>{
+  NEWS=Array.isArray(n)?n:[]; CONTENTS=Array.isArray(c)?c:[]; SITE=st||{};
+  if(SITE.slogan) $("#slogan").textContent=SITE.slogan;
+  if(SITE.footer) $("#footer").textContent=SITE.footer;
+  render();
+});
 </script>
 </body>
 </html>
