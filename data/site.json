@@ -1,17 +1,19 @@
 {
   "slogan": "'CLEAN·ON 理' 청렴을 켜고, 다듬다. 청렴 관련 주요 소식과 콘텐츠를 한 눈에",
+  "footer": "CLEAN·ON 理는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 외부 링크를 누르면 해당 사이트로 이동합니다.",
+  "menu_home": "Home",
+  "menu_news": "청렴 소식",
+  "menu_contents": "청렴 콘텐츠",
+  "menu_about": "CLEAN·ON 理 소개",
+  "desc_news": "   ",
+  "title_contents": "다양한 청렴 콘텐츠를 경험해 보세요.",
+  "desc_contents": "   ",
+  "title_about": "CLEAN·ON 理",
   "about_intro": "CLEAN·ON 理는 청렴과 관련된 소식을 짧게 정리하고, 직접 만든 교육 콘텐츠를 꾸준히 쌓아두는 개인 아카이브입니다. 理는 옥을 결대로 다듬는다는 뜻입니다. 청렴을 켜고, 조금씩 다듬어 가는 기록을 남깁니다.",
   "promise_title": "이 사이트의 약속",
   "promises": [
     "방문자의 어떠한 개인정보도 수집하거나 활용하지 않습니다.",
     "회원가입, 댓글, 방문자 분석 도구가 없습니다."
   ],
-  "about_note": "소식은 공식 발표와 확정된 사실을 바탕으로 정리하며, 원문은 출처 링크로 확인할 수 있습니다.",
-  "footer": "CLEAN·ON 理는 방문자의 개인정보를 수집하거나 활용하지 않습니다. 외부 링크를 누르면 해당 사이트로 이동합니다.",
-  "menu_home": "Home",
-  "menu_news": "청렴 소식",
-  "menu_contents": "청렴 콘텐츠",
-  "menu_about": "CLEAN·ON 理 소개",
-  "title_contents": "다양한 청렴 콘텐츠를 경험해 보세요.",
-  "title_about": "CLEAN·ON 理"
+  "about_note": "소식은 공식 발표와 확정된 사실을 바탕으로 정리하며, 원문은 출처 링크로 확인할 수 있습니다."
 }
