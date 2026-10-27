@@ -52,14 +52,16 @@ svg{flex:none}
 .app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
 .side{position:sticky;top:0;height:100vh;background:var(--side);border-right:1px solid var(--line);
   display:flex;flex-direction:column;padding:20px 12px 16px}
-.brand{display:flex;flex-direction:column;gap:6px;padding:4px 8px 20px}
+.brand{display:flex;flex-direction:column;gap:6px;padding:4px 8px 20px;width:max-content}
 .logo{display:block;width:168px}
 .logo img{display:block;width:100%;height:auto}
 .logo .lg-dark{display:none}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo .lg-light{display:none}:root:not([data-theme="light"]) .logo .lg-dark{display:block}}
 :root[data-theme="dark"] .logo .lg-light{display:none}
 :root[data-theme="dark"] .logo .lg-dark{display:block}
-.kor{font-size:11.5px;color:var(--subtle);letter-spacing:.35em;padding-left:2px}
+/* BI 가이드: 국문 표기는 토글(ON 理) 아래에 균등 배치 */
+.kor{display:flex;justify-content:space-between;width:43%;margin-left:52%;font-size:11.5px;font-weight:600;color:var(--subtle)}
+.kor:empty{display:none}
 
 .nav{display:flex;flex-direction:column;gap:2px}
 .nav a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:7px;color:var(--muted);font-size:14.5px;font-weight:500;transition:background .15s,color .15s}
@@ -263,7 +265,7 @@ a.row:hover .go{color:var(--accent)}
         <img class="lg-light" src="assets/logo-light.png" alt="CLEAN·ON 理">
         <img class="lg-dark" src="assets/logo-dark.png" alt="CLEAN·ON 理">
       </a>
-      <span class="kor" id="brand-kor" aria-hidden="true">클린온리</span>
+      <span class="kor" id="brand-kor" aria-hidden="true"><span>클</span><span>린</span><span>온</span><span>리</span></span>
     </div>
     <nav class="nav" aria-label="메뉴" id="nav"></nav>
     <div class="side-foot">
@@ -625,7 +627,7 @@ Promise.all([
   SITE = (s && typeof s === "object") ? s : {};
   $("#footer").textContent = raw("footer");
   $("#footer").hidden = !raw("footer");
-  $("#brand-kor").textContent = raw("brand_kor");
+  $("#brand-kor").innerHTML = [...raw("brand_kor")].filter(ch => ch.trim()).map(ch => `<span>${esc(ch)}</span>`).join("");
   $("#dark-label").textContent = raw("dark_mode");
   document.querySelectorAll(".logo, .logo img").forEach(el => el.setAttribute(el.tagName === "IMG" ? "alt" : "aria-label", raw("site_name")));
   syncSwitch();
