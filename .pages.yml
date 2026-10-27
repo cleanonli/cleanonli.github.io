@@ -10,185 +10,185 @@ content:
       - name: site_name
         label: "[공통] 사이트 이름 (브라우저 탭 제목)"
         type: string
-        description: "비워두면 기본값: CLEAN·ON 理"
+        description: "비워두면 기본값: CLEAN·ON 理  /  숨기려면 - 한 글자 입력"
       - name: brand_kor
         label: "[공통] 로고 아래 한글 표기"
         type: string
-        description: "비워두면 기본값: 클린온리"
+        description: "비워두면 기본값: 클린온리  /  숨기려면 - 한 글자 입력"
       - name: slogan
         label: "[공통] 슬로건 (첫 문장은 큰 제목, 나머지는 설명)"
         type: string
-        description: "비워두면 기본값: 청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳."
+        description: "비워두면 기본값: 청렴을 켜고, 다듬는다. 청렴 소식과 직접 만든 콘텐츠를 모아두는 곳.  /  숨기려면 - 한 글자 입력"
       - name: footer
         label: "[공통] 맨 아래 안내문"
         type: text
-        description: "비워두면 기본값: 운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. …"
+        description: "비워두면 기본값: 운영자는 방문자의 개인정보를 수집하거나 활용하지 않습니다. …  /  숨기려면 - 한 글자 입력"
       - name: dark_mode
         label: "[공통] 다크 모드 스위치 이름"
         type: string
-        description: "비워두면 기본값: 다크 모드"
+        description: "비워두면 기본값: 다크 모드  /  숨기려면 - 한 글자 입력"
       - name: switch_on
         label: "[공통] 스위치 켜짐 표시"
         type: string
-        description: "비워두면 기본값: ON"
+        description: "비워두면 기본값: ON  /  숨기려면 - 한 글자 입력"
       - name: switch_off
         label: "[공통] 스위치 꺼짐 표시"
         type: string
-        description: "비워두면 기본값: OFF"
+        description: "비워두면 기본값: OFF  /  숨기려면 - 한 글자 입력"
       - name: loading
         label: "[공통] 불러오는 중 안내"
         type: string
-        description: "비워두면 기본값: 불러오는 중…"
+        description: "비워두면 기본값: 불러오는 중…  /  숨기려면 - 한 글자 입력"
       - name: view_all
         label: "[공통] '전체 보기' 문구"
         type: string
-        description: "비워두면 기본값: 전체 보기"
+        description: "비워두면 기본값: 전체 보기  /  숨기려면 - 한 글자 입력"
       - name: all
         label: "[공통] 태그 '전체' 버튼"
         type: string
-        description: "비워두면 기본값: 전체"
+        description: "비워두면 기본값: 전체  /  숨기려면 - 한 글자 입력"
       - name: kind_default
         label: "[공통] 종류 미지정 콘텐츠 표시"
         type: string
-        description: "비워두면 기본값: 콘텐츠"
+        description: "비워두면 기본값: 콘텐츠  /  숨기려면 - 한 글자 입력"
       - name: go_read
         label: "[공통] 상세 글로 가는 표시"
         type: string
-        description: "비워두면 기본값: 읽기"
+        description: "비워두면 기본값: 읽기  /  숨기려면 - 한 글자 입력"
       - name: go_source
         label: "[공통] 원문으로 가는 표시"
         type: string
-        description: "비워두면 기본값: 원문"
+        description: "비워두면 기본값: 원문  /  숨기려면 - 한 글자 입력"
       - name: empty_news
         label: "[공통] 소식이 없을 때 안내"
         type: string
-        description: "비워두면 기본값: 아직 올린 소식이 없습니다."
+        description: "비워두면 기본값: 아직 올린 소식이 없습니다.  /  숨기려면 - 한 글자 입력"
       - name: empty_contents
         label: "[공통] 콘텐츠가 없을 때 안내"
         type: string
-        description: "비워두면 기본값: 아직 올린 콘텐츠가 없습니다."
+        description: "비워두면 기본값: 아직 올린 콘텐츠가 없습니다.  /  숨기려면 - 한 글자 입력"
       - name: menu_home
         label: "[메뉴] 처음"
         type: string
-        description: "비워두면 기본값: 처음"
+        description: "비워두면 기본값: 처음  /  숨기려면 - 한 글자 입력"
       - name: menu_news
         label: "[메뉴] 소식"
         type: string
-        description: "비워두면 기본값: 소식"
+        description: "비워두면 기본값: 소식  /  숨기려면 - 한 글자 입력"
       - name: menu_contents
         label: "[메뉴] 콘텐츠"
         type: string
-        description: "비워두면 기본값: 콘텐츠"
+        description: "비워두면 기본값: 콘텐츠  /  숨기려면 - 한 글자 입력"
       - name: menu_about
         label: "[메뉴] 소개"
         type: string
-        description: "비워두면 기본값: 소개"
+        description: "비워두면 기본값: 소개  /  숨기려면 - 한 글자 입력"
       - name: title_home_news
         label: "[처음 화면] 최근 소식 타일 제목"
         type: string
-        description: "비워두면 기본값: 최근 소식"
+        description: "비워두면 기본값: 최근 소식  /  숨기려면 - 한 글자 입력"
       - name: title_home_contents
         label: "[처음 화면] 아래 콘텐츠 목록 제목"
         type: string
-        description: "비워두면 기본값: 아카이브 콘텐츠"
+        description: "비워두면 기본값: 아카이브 콘텐츠  /  숨기려면 - 한 글자 입력"
       - name: home_new_badge
         label: "[처음 화면] 큰 타일 '새 콘텐츠' 표시"
         type: string
-        description: "비워두면 기본값: 새 콘텐츠"
+        description: "비워두면 기본값: 새 콘텐츠  /  숨기려면 - 한 글자 입력"
       - name: home_stat_title
         label: "[처음 화면] 숫자 타일 제목"
         type: string
-        description: "비워두면 기본값: 아카이브"
+        description: "비워두면 기본값: 아카이브  /  숨기려면 - 한 글자 입력"
       - name: home_stat_news
         label: "[처음 화면] 숫자 타일 '소식'"
         type: string
-        description: "비워두면 기본값: 소식"
+        description: "비워두면 기본값: 소식  /  숨기려면 - 한 글자 입력"
       - name: home_stat_contents
         label: "[처음 화면] 숫자 타일 '콘텐츠'"
         type: string
-        description: "비워두면 기본값: 콘텐츠"
+        description: "비워두면 기본값: 콘텐츠  /  숨기려면 - 한 글자 입력"
       - name: home_updated
         label: "[처음 화면] '마지막 업데이트' 문구"
         type: string
-        description: "비워두면 기본값: 마지막 업데이트"
+        description: "비워두면 기본값: 마지막 업데이트  /  숨기려면 - 한 글자 입력"
       - name: home_privacy_title
         label: "[처음 화면] 개인정보 타일 제목"
         type: string
-        description: "비워두면 기본값: 개인정보 수집"
+        description: "비워두면 기본값: 개인정보 수집  /  숨기려면 - 한 글자 입력"
       - name: home_privacy_num
         label: "[처음 화면] 개인정보 타일 큰 숫자"
         type: string
-        description: "비워두면 기본값: 0"
+        description: "비워두면 기본값: 0  /  숨기려면 - 한 글자 입력"
       - name: home_privacy_text
         label: "[처음 화면] 개인정보 타일 설명"
         type: string
-        description: "비워두면 기본값: 회원가입, 댓글, 방문자 분석 도구가 없습니다."
+        description: "비워두면 기본값: 회원가입, 댓글, 방문자 분석 도구가 없습니다.  /  숨기려면 - 한 글자 입력"
       - name: home_tags_title
         label: "[처음 화면] 태그 타일 제목"
         type: string
-        description: "비워두면 기본값: 태그로 찾기"
+        description: "비워두면 기본값: 태그로 찾기  /  숨기려면 - 한 글자 입력"
       - name: title_news
         label: "[소식 화면] 제목"
         type: string
-        description: "비워두면 기본값: 청렴 소식"
+        description: "비워두면 기본값: 청렴 소식  /  숨기려면 - 한 글자 입력"
       - name: desc_news
         label: "[소식 화면] 설명 ({n} = 소식 개수)"
         type: string
-        description: "비워두면 기본값: {n}건의 소식. 원문 링크와 함께 짧게 정리합니다."
+        description: "비워두면 기본값: {n}건의 소식. 원문 링크와 함께 짧게 정리합니다.  /  숨기려면 - 한 글자 입력"
       - name: title_contents
         label: "[콘텐츠 화면] 제목"
         type: string
-        description: "비워두면 기본값: 교육 콘텐츠"
+        description: "비워두면 기본값: 교육 콘텐츠  /  숨기려면 - 한 글자 입력"
       - name: desc_contents
         label: "[콘텐츠 화면] 설명 ({n} = 콘텐츠 개수)"
         type: string
-        description: "비워두면 기본값: {n}개의 콘텐츠. 직접 만든 교육 자료를 모아 둡니다."
+        description: "비워두면 기본값: {n}개의 콘텐츠. 직접 만든 교육 자료를 모아 둡니다.  /  숨기려면 - 한 글자 입력"
       - name: detail_summary
         label: "[상세 페이지] 요약 상자 제목"
         type: string
-        description: "비워두면 기본값: 3줄 요약"
+        description: "비워두면 기본값: 3줄 요약  /  숨기려면 - 한 글자 입력"
       - name: detail_btn_source
         label: "[상세 페이지] 소식 원문 버튼 ({source} = 출처 기관명)"
         type: string
-        description: "비워두면 기본값: {source} 원문 보기"
+        description: "비워두면 기본값: {source} 원문 보기  /  숨기려면 - 한 글자 입력"
       - name: detail_btn_file
         label: "[상세 페이지] 콘텐츠 파일 열기 버튼"
         type: string
-        description: "비워두면 기본값: 콘텐츠 열기"
+        description: "비워두면 기본값: 콘텐츠 열기  /  숨기려면 - 한 글자 입력"
       - name: detail_btn_link
         label: "[상세 페이지] 콘텐츠 바깥 링크 버튼"
         type: string
-        description: "비워두면 기본값: 바로 가기"
+        description: "비워두면 기본값: 바로 가기  /  숨기려면 - 한 글자 입력"
       - name: detail_btn_list
         label: "[상세 페이지] 목록으로 버튼"
         type: string
-        description: "비워두면 기본값: 목록으로"
+        description: "비워두면 기본값: 목록으로  /  숨기려면 - 한 글자 입력"
       - name: not_found
         label: "[상세 페이지] 글을 못 찾았을 때 안내"
         type: string
-        description: "비워두면 기본값: 글을 찾을 수 없습니다."
+        description: "비워두면 기본값: 글을 찾을 수 없습니다.  /  숨기려면 - 한 글자 입력"
       - name: back_home
         label: "[상세 페이지] '처음으로' 링크"
         type: string
-        description: "비워두면 기본값: 처음으로"
+        description: "비워두면 기본값: 처음으로  /  숨기려면 - 한 글자 입력"
       - name: title_about
         label: "[소개 화면] 제목"
         type: string
-        description: "비워두면 기본값: 소개"
+        description: "비워두면 기본값: 소개  /  숨기려면 - 한 글자 입력"
       - name: desc_about
         label: "[소개 화면] 제목 아래 설명 (비우면 숨김)"
         type: string
       - name: about_replay
         label: "[소개 화면] 영상 '다시 재생' 버튼"
         type: string
-        description: "비워두면 기본값: 다시 재생"
+        description: "비워두면 기본값: 다시 재생  /  숨기려면 - 한 글자 입력"
       - name: about_intro
         label: "[소개 화면] 첫 문단"
         type: text
       - name: promise_title
         label: "[소개 화면] 약속 상자 제목"
         type: string
-        description: "비워두면 기본값: 이 사이트의 약속"
+        description: "비워두면 기본값: 이 사이트의 약속  /  숨기려면 - 한 글자 입력"
       - name: promises
         label: "[소개 화면] 약속 항목"
         type: string
