@@ -868,16 +868,16 @@ footer {
 
     <nav aria-label="메인 메뉴">
       <a href="#home" data-view="home">
-        <span>처음</span>
+        <span id="menu-home">처음</span>
       </a>
       <a href="#news" data-view="news">
-        <span>소식</span>
+        <span id="menu-news">소식</span>
       </a>
       <a href="#contents" data-view="contents">
-        <span>콘텐츠</span>
+        <span id="menu-contents">콘텐츠</span>
       </a>
       <a href="#about" data-view="about">
-        <span>소개</span>
+        <span id="menu-about">소개</span>
       </a>
     </nav>
   </header>
@@ -898,6 +898,13 @@ footer {
  * CLEAN·ON 理 - 프론트엔드 엔진
  */
 let NEWS = [], CONTENTS = [], SITE = {}, activeTag = null;
+/* 메뉴·화면 제목 기본값. 관리 화면 "사이트 문구"에 값을 넣으면 그 값이 우선 */
+const DEFAULT_LABELS = {
+  menu_home:"처음", menu_news:"소식", menu_contents:"콘텐츠", menu_about:"소개",
+  title_home_news:"최근 소식", title_home_contents:"아카이브 콘텐츠",
+  title_news:"청렴 소식", title_contents:"교육 콘텐츠", title_about:"소개"
+};
+const L = k => esc((SITE[k] && String(SITE[k]).trim()) || DEFAULT_LABELS[k]);
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1000,9 +1007,9 @@ const views = {
         <div class="sec-head">
           <div class="sec-title-wrap">
             <span class="sec-index">01</span>
-            <h2>최근 소식</h2>
+            <h2>${L("title_home_news")}</h2>
           </div>
-          <a class="more-btn" href="#news">소식 전체 보기 ${ICONS.arrowRight}</a>
+          <a class="more-btn" href="#news">${L("menu_news")} 전체 보기 ${ICONS.arrowRight}</a>
         </div>
         ${newsList([...NEWS].sort(byDate).slice(0, 3))}
       </section>
@@ -1011,9 +1018,9 @@ const views = {
         <div class="sec-head">
           <div class="sec-title-wrap">
             <span class="sec-index">02</span>
-            <h2>아카이브 콘텐츠</h2>
+            <h2>${L("title_home_contents")}</h2>
           </div>
-          <a class="more-btn" href="#contents">콘텐츠 전체 보기 ${ICONS.arrowRight}</a>
+          <a class="more-btn" href="#contents">${L("menu_contents")} 전체 보기 ${ICONS.arrowRight}</a>
         </div>
         ${cardGrid([...CONTENTS].sort(byDate).slice(0, 3))}
       </section>
@@ -1028,7 +1035,7 @@ const views = {
         <div class="sec-head">
           <div class="sec-title-wrap">
             <span class="sec-index">ARCHIVE</span>
-            <h2>청렴 소식</h2>
+            <h2>${L("title_news")}</h2>
           </div>
         </div>
         ${allTags.length ? `
@@ -1053,7 +1060,7 @@ const views = {
       <div class="sec-head">
         <div class="sec-title-wrap">
           <span class="sec-index">ARCHIVE</span>
-          <h2>교육 콘텐츠</h2>
+          <h2>${L("title_contents")}</h2>
         </div>
       </div>
       ${cardGrid([...CONTENTS].sort(byDate))}
@@ -1065,7 +1072,7 @@ const views = {
       <div class="sec-head">
         <div class="sec-title-wrap">
           <span class="sec-index">ABOUT</span>
-          <h2>소개</h2>
+          <h2>${L("title_about")}</h2>
         </div>
       </div>
       <div class="about-wrap">
@@ -1194,6 +1201,10 @@ Promise.all([
   if (SITE.footer) {
     $("#footer").textContent = SITE.footer;
   }
+  ["home","news","contents","about"].forEach(k => {
+    const el = $("#menu-" + k);
+    if (el) el.innerHTML = L("menu_" + k);
+  });
   render();
 });
 </script>
