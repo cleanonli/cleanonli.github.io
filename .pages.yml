@@ -80,6 +80,28 @@ content:
         label: 태그
         type: string
         list: true
+      - name: summary
+        label: 3줄 요약 (선택)
+        type: text
+        description: 한 줄에 하나씩 적습니다. 요약이나 본문을 쓰면 상세 페이지가 생깁니다.
+      - name: body
+        label: 본문 (선택)
+        type: rich-text
+        description: 비워두면 상세 페이지 없이 바로 링크로 연결됩니다.
+        options:
+          format: html
+      - name: quote
+        label: 강조 인용구 (선택)
+        type: text
+        description: 본문 첫 문단 뒤에 크게 표시됩니다.
+      - name: quote_source
+        label: 인용 출처 (선택)
+        type: string
+      - name: id
+        label: 글 번호 (자동 생성, 수정하지 마세요)
+        type: uuid
+        options:
+          editable: false
 
   - name: contents
     label: 콘텐츠
@@ -111,3 +133,25 @@ content:
       - name: thumbnail
         label: 썸네일 이미지 (선택)
         type: image
+      - name: summary
+        label: 3줄 요약 (선택)
+        type: text
+        description: 한 줄에 하나씩 적습니다. 요약이나 본문을 쓰면 상세 페이지가 생깁니다.
+      - name: body
+        label: 본문 (선택)
+        type: rich-text
+        description: 비워두면 상세 페이지 없이 바로 링크로 연결됩니다.
+        options:
+          format: html
+      - name: quote
+        label: 강조 인용구 (선택)
+        type: text
+        description: 본문 첫 문단 뒤에 크게 표시됩니다.
+      - name: quote_source
+        label: 인용 출처 (선택)
+        type: string
+      - name: id
+        label: 글 번호 (자동 생성, 수정하지 마세요)
+        type: uuid
+        options:
+          editable: false
