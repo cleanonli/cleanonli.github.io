@@ -26,6 +26,33 @@ content:
       - name: footer
         label: 맨 아래 안내문
         type: text
+      - name: menu_home
+        label: "메뉴 이름: 처음 (비워두면 기본값)"
+        type: string
+      - name: menu_news
+        label: "메뉴 이름: 소식"
+        type: string
+      - name: menu_contents
+        label: "메뉴 이름: 콘텐츠"
+        type: string
+      - name: menu_about
+        label: "메뉴 이름: 소개"
+        type: string
+      - name: title_home_news
+        label: "처음 화면 제목 1 (기본: 최근 소식)"
+        type: string
+      - name: title_home_contents
+        label: "처음 화면 제목 2 (기본: 아카이브 콘텐츠)"
+        type: string
+      - name: title_news
+        label: "소식 화면 제목 (기본: 청렴 소식)"
+        type: string
+      - name: title_contents
+        label: "콘텐츠 화면 제목 (기본: 교육 콘텐츠)"
+        type: string
+      - name: title_about
+        label: "소개 화면 제목 (기본: 소개)"
+        type: string
 
   - name: news
     label: 소식
@@ -84,4 +111,3 @@ content:
       - name: thumbnail
         label: 썸네일 이미지 (선택)
         type: image
-
