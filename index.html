@@ -318,7 +318,8 @@ const DEFAULTS = {
 };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const raw = k => { const v = SITE[k]; return (v != null && String(v).trim() !== "") ? String(v).trim() : (DEFAULTS[k] ?? ""); };
+/* 빈칸 = 기본값, "-" 한 글자 = 표시 안 함 */
+const raw = k => { const v = SITE[k]; const t = v == null ? "" : String(v).trim(); return t === "-" ? "" : (t !== "" ? t : (DEFAULTS[k] ?? "")); };
 /* T: 문구(이스케이프됨). vars로 {n}, {source} 치환 */
 const T = (k, vars = {}) => {
   let t = esc(raw(k));
@@ -623,6 +624,7 @@ Promise.all([
   CONTENTS = Array.isArray(c) ? c : [];
   SITE = (s && typeof s === "object") ? s : {};
   $("#footer").textContent = raw("footer");
+  $("#footer").hidden = !raw("footer");
   $("#brand-kor").textContent = raw("brand_kor");
   $("#dark-label").textContent = raw("dark_mode");
   document.querySelectorAll(".logo, .logo img").forEach(el => el.setAttribute(el.tagName === "IMG" ? "alt" : "aria-label", raw("site_name")));
