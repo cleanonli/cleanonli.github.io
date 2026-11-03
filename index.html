@@ -473,8 +473,9 @@ function cardItem({c,i}){
     </div>
   </a>`;
 }
-function tagChips(linkToNews){
-  const tags = [...new Set(NEWS.flatMap(n => n.tags || []).filter(Boolean))];
+function tagChips(linkToNews, list){
+  const src = list || (linkToNews && firstOf("news") ? NEWS.filter(n => inBoard(n, firstOf("news"))) : NEWS);
+  const tags = [...new Set(src.flatMap(n => n.tags || []).filter(Boolean))];
   if (!tags.length) return "";
   const all = linkToNews ? "" : `<button type="button" class="chip" data-all="1" data-go="0" aria-pressed="${!activeTag}"><span class="dot"></span>${T("all")}</button>`;
   return `<div class="chips" role="toolbar">${all}${tags.map(t =>
@@ -526,11 +527,54 @@ function contentTile({c,i}, size){
 }
 const bentoList = (items, tile) => { const sz = layoutSizes(items.length); return `<div class="lb">${items.map((it,j) => tile(it, sz[j])).join("")}</div>`; };
 
+/* ---------- 메뉴 (data/menus.json, 관리 화면 "메뉴 관리") ----------
+   종류: 처음 / 소식 목록 / 콘텐츠 목록 / 소개 / 글 페이지 / 바깥 링크
+   순서 = 메뉴 순서. 같은 종류를 여러 개 만들 수 있고, 글의 "보여줄 메뉴" 칸으로 나눠 담음 */
+let MENUS_RAW = null, MENUS = [];
+const TYPE_MAP = { "처음":"home", "소식 목록":"news", "콘텐츠 목록":"contents", "소개":"about", "글 페이지":"page", "바깥 링크":"link",
+  home:"home", news:"news", contents:"contents", about:"about", page:"page", link:"link" };
+const DEFAULT_MENUS = [{type:"처음",slug:"home"},{type:"소식 목록",slug:"news"},{type:"콘텐츠 목록",slug:"contents"},{type:"소개",slug:"about"}];
+const BUILTIN = ["home","news","contents","about"];
+function buildMenus(){
+  const src = (MENUS_RAW && Array.isArray(MENUS_RAW.menus) && MENUS_RAW.menus.length) ? MENUS_RAW.menus : DEFAULT_MENUS;
+  const used = new Set(), seenType = new Set(), out = [];
+  src.forEach((m, idx) => {
+    if (!m || m.hidden === true) return;
+    const type = TYPE_MAP[String(m.type || "").trim()];
+    if (!type) return;
+    let slug = String(m.slug || "").trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+    if (!slug && type !== "link") slug = (!seenType.has(type) && BUILTIN.includes(type)) ? type : "menu" + (idx + 1);
+    if (/^[nc]-/.test(slug)) slug = "m-" + slug;
+    if (type !== "link") { let b = slug, k = 2; while (used.has(slug)) slug = b + "-" + (k++); used.add(slug); }
+    const first = !seenType.has(type); seenType.add(type);
+    /* 기존 "사이트 문구"의 메뉴 이름·제목·설명은 각 종류의 첫 메뉴에서 기본값으로 이어 씀 */
+    const legacy = (first && BUILTIN.includes(type)) ? type : null;
+    const label = has(m.label) ? String(m.label).trim() : (legacy ? raw("menu_" + legacy) : (has(m.title) ? String(m.title).trim() : slug));
+    const title = has(m.title) ? String(m.title).trim() : (legacy && legacy !== "home" ? raw("title_" + legacy) : label);
+    const descRaw = m.desc == null ? "" : String(m.desc).trim();
+    const desc = descRaw === "-" ? "" : (descRaw || (legacy && legacy !== "home" ? raw("desc_" + legacy) : ""));
+    out.push({ type, slug, label, title, desc, body: m.body, url: String(m.url || "").trim(), first });
+  });
+  MENUS = out;
+}
+const firstOf = type => MENUS.find(m => m.type === type);
+const menuBySlug = slug => MENUS.find(m => m.slug === slug && m.type !== "link");
+/* 글이 속한 메뉴: "보여줄 메뉴" 칸이 맞으면 그 메뉴, 아니면 같은 종류의 첫 메뉴 */
+function boardOf(item, type){
+  const want = String(item.menu || "").trim().toLowerCase();
+  const m = want && MENUS.find(x => x.type === type && x.slug === want);
+  return m || firstOf(type);
+}
+const inBoard = (item, menu) => boardOf(item, menu.type) === menu;
+const descText = (menu, n) => menu.desc ? esc(menu.desc).replaceAll("{n}", `<span class="mono">${n}</span>`) : "";
+const headHtml = (menu, n) => `<header class="page-head"><h1>${esc(menu.title)}</h1>${descText(menu, n) ? `<p>${descText(menu, n)}</p>` : ""}</header>`;
+
 /* ---------- 화면 ---------- */
 const views = {
   home(){
     const sp = sloganParts();
     const cs = sortedContents(), ns = sortedNews();
+    const newsM = firstOf("news"), contM = firstOf("contents"), aboutM = firstOf("about");
     const feat = cs[0];
     const lastDate = [...NEWS, ...CONTENTS].map(x => d10(x.date)).sort().pop();
     const featTile = feat ? (() => {
@@ -542,7 +586,7 @@ const views = {
           <h3>${esc(feat.c.title)}</h3>
           ${has(feat.c.desc) ? `<p>${esc(feat.c.desc)}</p>` : ""}
         </div></a>`;
-    })() : `<a class="tile t-feature" href="#about">
+    })() : `<a class="tile t-feature" href="${aboutM ? "#" + aboutM.slug : "#"}">
         <div class="feature-visual"><span class="big-icon">${I.power.replace('width="16" height="16"','width="26" height="26"')}</span></div>
         <div class="feature-body"><h3>${sp.h}</h3>${has(SITE.about_intro) ? `<p>${esc(SITE.about_intro)}</p>` : ""}</div></a>`;
     return `
@@ -554,7 +598,7 @@ const views = {
           ${ns.length ? `<ul class="mini-list">${ns.slice(0,4).map(({n,i}) => { const h = newsHref(n,i), dt = hasDetail(n);
             return `<li><a href="${esc(h)}"${dt ? "" : ext(h)}><span class="d">${fmt(n.date)}</span><span class="tc"><span class="t">${esc(n.title)}</span>${has(n.comment) ? `<span class="cm">${esc(n.comment)}</span>` : ""}</span><span class="go">${dt ? I.arrow : I.ext}</span></a></li>`; }).join("")}</ul>`
             : `<p class="empty">${T("empty_news")}</p>`}
-          <a class="tile-foot" href="#news"><span>${L("menu_news")} ${T("view_all")} <span class="mono">${NEWS.length}</span></span>${I.arrow}</a>
+          ${newsM ? `<a class="tile-foot" href="#${newsM.slug}"><span>${esc(newsM.label)} ${T("view_all")} <span class="mono">${NEWS.filter(n => inBoard(n, newsM)).length}</span></span>${I.arrow}</a>` : ""}
         </div>
         <div class="tile t-stat">
           <span class="label">${I.chart} ${T("home_stat_title")}</span>
@@ -564,32 +608,36 @@ const views = {
           </div>
           ${lastDate ? `<span class="upd">${T("home_updated")} <span class="mono">${fmt(lastDate)}</span></span>` : ""}
         </div>
-        <a class="tile t-promise" href="#about">
+        <a class="tile t-promise" href="${aboutM ? "#" + aboutM.slug : "#"}">
           <span class="label">${I.power} ${T("home_privacy_title")}</span>
           <span class="stat-num">${T("home_privacy_num")}</span>
           <p>${T("home_privacy_text")}</p>
         </a>
-        ${tagChips(true) ? `<div class="tile t-tags"><span class="label">${I.tag} ${T("home_tags_title")}</span>${tagChips(true)}</div>` : ""}
+        ${newsM && tagChips(true) ? `<div class="tile t-tags"><span class="label">${I.tag} ${T("home_tags_title")}</span>${tagChips(true)}</div>` : ""}
       </section>
       ${cs.length > 1 ? `<section class="sec">
-        <div class="sec-head"><h2>${L("title_home_contents")}</h2><a class="more" href="#contents">${L("menu_contents")} ${T("view_all")} ${I.arrow}</a></div>
+        <div class="sec-head"><h2>${L("title_home_contents")}</h2>${contM ? `<a class="more" href="#${contM.slug}">${esc(contM.label)} ${T("view_all")} ${I.arrow}</a>` : ""}</div>
         <div class="cards">${cs.slice(1,9).map(cardItem).join("")}</div>
       </section>` : ""}`;
   },
-  news(){
-    const items = sortedNews().filter(({n}) => !activeTag || (n.tags||[]).includes(activeTag));
-    return `<header class="page-head"><h1>${L("title_news")}</h1>${D("desc_news", NEWS.length) ? `<p>${D("desc_news", NEWS.length)}</p>` : ""}</header>
-      <section class="sec">${tagChips(false)}
+  news(menu){
+    const all = sortedNews().filter(({n}) => inBoard(n, menu));
+    const items = all.filter(({n}) => !activeTag || (n.tags||[]).includes(activeTag));
+    return `${headHtml(menu, all.length)}
+      <section class="sec">${tagChips(false, all.map(x => x.n))}
         ${items.length ? bentoList(items, newsTile) : `<p class="empty">${T("empty_news")}</p>`}
       </section>`;
   },
-  contents(){
-    const items = sortedContents();
-    return `<header class="page-head"><h1>${L("title_contents")}</h1>${D("desc_contents", CONTENTS.length) ? `<p>${D("desc_contents", CONTENTS.length)}</p>` : ""}</header>
+  contents(menu){
+    const items = sortedContents().filter(({c}) => inBoard(c, menu));
+    return `${headHtml(menu, items.length)}
       <section class="sec">${items.length ? bentoList(items, contentTile) : `<p class="empty">${T("empty_contents")}</p>`}</section>`;
   },
-  about(){
-    return `<header class="page-head"><h1>${L("title_about")}</h1>${D("desc_about", 0) ? `<p>${D("desc_about", 0)}</p>` : ""}</header>
+  page(menu){
+    return `${headHtml(menu, 0)}${has(menu.body) ? `<article class="article"><div class="prose">${clean(menu.body)}</div></article>` : ""}`;
+  },
+  about(menu){
+    return `${headHtml(menu, 0)}
       <figure class="sig" id="sig">
         <video id="sig-video" muted playsinline preload="auto" aria-label="${T("site_name")}"></video>
         <button type="button" class="sig-replay" id="sig-replay">${P('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>')} ${T("about_replay")}</button>
@@ -610,7 +658,8 @@ function detail(type, id){
   const x = list[idx];
   if (!x) return `<p class="empty">${T("not_found")} <a class="more" href="#home">${T("back_home")}</a></p>`;
   document.title = `${x.title} · ${raw("site_name")}`;
-  const backKey = isNews ? "news" : "contents";
+  const board = boardOf(x, isNews ? "news" : "contents");
+  const backKey = board ? board.slug : "";
   const lines = String(x.summary || "").split(/\n+/).map(s => s.replace(/^\s*([-•*]|\d+[.)])\s*/, "").trim()).filter(Boolean);
   let body = has(x.body) ? clean(x.body) : "";
   const quote = has(x.quote) ? `<figure class="pull"><blockquote>${esc(x.quote)}</blockquote>${has(x.quote_source) ? `<figcaption>${esc(x.quote_source)}</figcaption>` : ""}</figure>` : "";
@@ -624,7 +673,7 @@ function detail(type, id){
   const target = isNews ? x.url : (x.file ? local(x.file) : x.url);
   const btnText = isNews ? T("detail_btn_source", { source: esc(x.source || "") }) : (x.file ? T("detail_btn_file") : T("detail_btn_link"));
   return `<article class="article">
-    <a class="back" href="#${backKey}">${I.back} ${L("menu_" + backKey)}</a>
+    ${board ? `<a class="back" href="#${backKey}">${I.back} ${esc(board.label)}</a>` : ""}
     <header class="a-head">
       <div class="a-meta">${isNews ? (x.tags||[]).filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join("") : `<span class="badge">${x.kind ? esc(x.kind) : T("kind_default")}</span>`}
         <span class="mono">${fmt(x.date)}</span>${isNews && has(x.source) ? `<span>· ${esc(x.source)}</span>` : ""}</div>
@@ -634,15 +683,19 @@ function detail(type, id){
     ${lines.length ? `<section class="tldr" ><span class="label">${I.check} ${T("detail_summary")}</span><ol>${lines.slice(0,5).map(l => `<li>${esc(l)}</li>`).join("")}</ol></section>` : ""}
     ${quoteOutside}
     ${bodyHtml ? `<div class="prose">${bodyHtml}</div>` : ""}
-    ${has(target) ? `<div class="actions"><a class="btn primary" href="${esc(target)}"${ext(target)}>${btnText} ${isExt(target) ? I.ext : I.arrow}</a><a class="btn" href="#${backKey}">${T("detail_btn_list")}</a></div>` : ""}
+    ${has(target) ? `<div class="actions"><a class="btn primary" href="${esc(target)}"${ext(target)}>${btnText} ${isExt(target) ? I.ext : I.arrow}</a>${board ? `<a class="btn" href="#${backKey}">${T("detail_btn_list")}</a>` : ""}</div>` : ""}
   </article>`;
 }
 
 /* ---------- 렌더 ---------- */
-function renderNav(key){
-  const items = [["home",I.home,""],["news",I.news,NEWS.length],["contents",I.contents,CONTENTS.length],["about",I.about,""]];
-  $("#nav").innerHTML = items.map(([k,ic,cnt]) =>
-    `<a href="#${k}" ${k===key ? 'aria-current="page"' : ""}>${ic}<span>${L("menu_"+k)}</span>${cnt!=="" ? `<span class="count">${cnt}</span>` : ""}</a>`).join("");
+const NAV_ICON = { home:"home", news:"news", contents:"contents", about:"about", page:"글", link:"ext" };
+function renderNav(current){
+  $("#nav").innerHTML = MENUS.map(m => {
+    const ic = I[NAV_ICON[m.type]] || I.about;
+    if (m.type === "link") return has(m.url) ? `<a href="${esc(m.url)}"${ext(m.url)}>${ic}<span>${esc(m.label)}</span></a>` : "";
+    const cnt = m.type === "news" ? NEWS.filter(n => inBoard(n, m)).length : m.type === "contents" ? CONTENTS.filter(c => inBoard(c, m)).length : "";
+    return `<a href="#${m.slug}" ${current === m ? 'aria-current="page"' : ""}>${ic}<span>${esc(m.label)}</span>${cnt !== "" ? `<span class="count">${cnt}</span>` : ""}</a>`;
+  }).join("");
 }
 /* 화면 모드에 맞는 영상 고르기 */
 function sigSource(){
@@ -669,14 +722,22 @@ function setupSignature(){
 function render(){
   const h = location.hash.slice(1);
   const m = h.match(/^([nc])-(.+)$/);
-  let key = m ? (m[1] === "n" ? "news" : "contents") : ((h in views) ? h : "home");
-  if (!m) document.title = key === "home" ? raw("site_name") : `${raw("menu_"+key)} · ${raw("site_name")}`;
-  $("#view").innerHTML = m ? detail(m[1], m[2]) : views[key]();
-  renderNav(key);
-  if (key === "about" && !m) setupSignature();
+  let menu;
+  if (m) {
+    const list = m[1] === "n" ? NEWS : CONTENTS;
+    const x = list.find((it,i) => (m[1] === "n" ? NEWS_ID(it,i) : CONTENT_ID(it,i)) === h);
+    menu = x ? boardOf(x, m[1] === "n" ? "news" : "contents") : null;
+  } else {
+    menu = menuBySlug(h) || MENUS.find(x => x.type !== "link");
+  }
+  if (!m) document.title = !menu || menu.type === "home" ? raw("site_name") : `${menu.label} · ${raw("site_name")}`;
+  $("#view").innerHTML = m ? detail(m[1], m[2]) : (menu ? views[menu.type](menu) : `<p class="empty">${T("not_found")}</p>`);
+  renderNav(menu);
+  if (!m && menu && menu.type === "about") setupSignature();
   document.querySelectorAll(".chip").forEach(b => b.onclick = () => {
     activeTag = b.dataset.all ? null : b.dataset.tag;
-    if (b.dataset.go === "1") { keepTag = true; location.hash = "news"; } else render();
+    const nm = firstOf("news");
+    if (b.dataset.go === "1" && nm) { keepTag = true; location.hash = nm.slug; } else render();
   });
 }
 window.addEventListener("hashchange", () => {
@@ -714,11 +775,14 @@ function syncSwitch(){
 Promise.all([
   fetch("data/news.json", {cache:"no-store"}).then(r => r.json()).catch(() => []),
   fetch("data/contents.json", {cache:"no-store"}).then(r => r.json()).catch(() => []),
-  fetch("data/site.json", {cache:"no-store"}).then(r => r.json()).catch(() => ({}))
-]).then(([n, c, s]) => {
+  fetch("data/site.json", {cache:"no-store"}).then(r => r.json()).catch(() => ({})),
+  fetch("data/menus.json", {cache:"no-store"}).then(r => r.ok ? r.json() : null).catch(() => null)
+]).then(([n, c, s, mn]) => {
+  MENUS_RAW = mn;
   NEWS = Array.isArray(n) ? n : [];
   CONTENTS = Array.isArray(c) ? c : [];
   SITE = (s && typeof s === "object") ? s : {};
+  buildMenus();
   $("#footer").textContent = raw("footer");
   $("#footer").hidden = !raw("footer");
   $("#brand-kor").innerHTML = [...raw("brand_kor")].filter(ch => ch.trim()).map(ch => `<span>${esc(ch)}</span>`).join("");
