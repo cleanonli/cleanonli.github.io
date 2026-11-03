@@ -1,0 +1,36 @@
+{
+  "menus": [
+    {
+      "type": "처음",
+      "label": "",
+      "slug": "home",
+      "title": "",
+      "desc": "",
+      "hidden": false
+    },
+    {
+      "type": "소식 목록",
+      "label": "",
+      "slug": "news",
+      "title": "",
+      "desc": "",
+      "hidden": false
+    },
+    {
+      "type": "콘텐츠 목록",
+      "label": "",
+      "slug": "contents",
+      "title": "",
+      "desc": "",
+      "hidden": false
+    },
+    {
+      "type": "소개",
+      "label": "",
+      "slug": "about",
+      "title": "",
+      "desc": "",
+      "hidden": false
+    }
+  ]
+}
